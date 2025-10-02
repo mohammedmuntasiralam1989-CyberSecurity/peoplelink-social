@@ -1,0 +1,1365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>People Link - Premium Social Network</title>
+    <style>
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #1877f2;
+            --secondary: #42b72a;
+            --accent: #ff6b6b;
+            --dark: #1c1e21;
+            --darker: #121212;
+            --light: #f0f2f5;
+            --text: #333;
+            --text-light: #65676b;
+            --gold: #ffd700;
+            --silver: #c0c0c0;
+            --bronze: #cd7f32;
+        }
+
+        body {
+            background: var(--darker);
+            color: white;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Luxury Glass Morphism Effect */
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+        }
+
+        .premium-glow {
+            box-shadow: 0 8px 32px rgba(255, 215, 0, 0.3);
+        }
+
+        /* Login System */
+        .login-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .auth-card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .social-login-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .social-login-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .social-login-btn.gmail {
+            border-color: #db4437;
+            color: #db4437;
+        }
+
+        .social-login-btn.gmail:hover {
+            background: #db4437;
+            color: white;
+        }
+
+        .social-login-btn.microsoft {
+            border-color: #0078d4;
+            color: #0078d4;
+        }
+
+        .social-login-btn.microsoft:hover {
+            background: #0078d4;
+            color: white;
+        }
+
+        .social-login-btn.phone {
+            border-color: #28a745;
+            color: #28a745;
+        }
+
+        .social-login-btn.phone:hover {
+            background: #28a745;
+            color: white;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(28, 30, 33, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 15px 5%;
+            display: none;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .nav-links a.active {
+            background: var(--primary);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 2px solid var(--gold);
+            object-fit: cover;
+        }
+
+        .verified-badge {
+            color: var(--gold);
+            font-size: 16px;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 80px auto 20px;
+            padding: 20px;
+            display: none;
+            grid-template-columns: 300px 1fr 350px;
+            gap: 20px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .sidebar-section {
+            margin-bottom: 20px;
+            padding: 25px;
+        }
+
+        .quick-actions .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            color: white;
+            border-radius: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+
+        .quick-actions .action-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(10px);
+        }
+
+        /* Feed */
+        .feed {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .create-post {
+            padding: 25px;
+        }
+
+        .post-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            color: white;
+            font-size: 16px;
+            resize: none;
+            margin-bottom: 15px;
+        }
+
+        .post-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .post-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .media-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .media-btn {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            padding: 10px 15px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .media-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .post-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .post-btn:hover {
+            background: #166fe5;
+            transform: translateY(-2px);
+        }
+
+        /* Post Card */
+        .post-card {
+            padding: 25px;
+            position: relative;
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .post-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary);
+        }
+
+        .post-user-info {
+            flex: 1;
+        }
+
+        .post-username {
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .post-time {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+
+        .post-content {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .post-image {
+            width: 100%;
+            border-radius: 15px;
+            margin-bottom: 15px;
+        }
+
+        .post-stats {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-light);
+            font-size: 14px;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .post-actions-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            padding-top: 15px;
+        }
+
+        .post-action-btn {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .post-action-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .post-action-btn.active {
+            color: var(--primary);
+            background: rgba(24, 119, 242, 0.1);
+        }
+
+        /* Right Sidebar */
+        .right-sidebar {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .sponsored-card, .suggestions-card {
+            margin-bottom: 20px;
+            padding: 25px;
+        }
+
+        .sponsored-item, .suggestion-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .sponsored-item:hover, .suggestion-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .suggestion-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .follow-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .follow-btn:hover {
+            background: #166fe5;
+        }
+
+        .follow-btn.following {
+            background: var(--secondary);
+        }
+
+        /* Security Badge */
+        .security-badge {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        /* Online Status */
+        .online-indicator {
+            width: 12px;
+            height: 12px;
+            background: var(--secondary);
+            border-radius: 50%;
+            border: 2px solid var(--darker);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* All System Modals */
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--darker);
+            padding: 30px;
+            border-radius: 20px;
+            z-index: 2000;
+            display: none;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .modal.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .promo-code-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            margin: 15px 0;
+            font-size: 16px;
+        }
+
+        /* Messaging System */
+        .messaging-container {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            width: 350px;
+            height: 500px;
+            background: var(--darker);
+            border-radius: 15px;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: none;
+            flex-direction: column;
+        }
+
+        .messaging-container.active {
+            display: flex;
+        }
+
+        /* Video Call System */
+        .video-call-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--darker);
+            z-index: 1000;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-call-container.active {
+            display: flex;
+        }
+
+        /* Reels System */
+        .reels-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            z-index: 1000;
+            display: none;
+        }
+
+        .reels-container.active {
+            display: block;
+        }
+
+        /* Notification System */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--primary);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            z-index: 10000;
+            display: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .notification.active {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Comment System */
+        .comments-section {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: none;
+        }
+
+        .comments-section.active {
+            display: block;
+        }
+
+        .comment {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .comment-input {
+            width: 100%;
+            padding: 10px 15px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.05);
+            border: none;
+            color: white;
+            margin-top: 10px;
+        }
+
+        /* Error Messages */
+        .error-message {
+            color: #ff6b6b;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .success-message {
+            color: #42b72a;
+            font-size: 14px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .container {
+                grid-template-columns: 250px 1fr;
+            }
+            .right-sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                padding: 10px;
+            }
+            .sidebar {
+                display: none;
+            }
+            .navbar {
+                padding: 15px;
+            }
+            .nav-links {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login System -->
+    <div class="login-container" id="loginContainer">
+        <div class="auth-card">
+            <h2 style="text-align: center; margin-bottom: 10px; color: var(--dark);">Welcome to People Link</h2>
+            <p style="text-align: center; color: var(--text-light); margin-bottom: 30px;">Join the premium social network</p>
+            
+            <div class="social-login-options">
+                <button class="social-login-btn gmail" onclick="loginWithProvider('gmail')">
+                    <span class="social-icon">📧</span>
+                    Continue with Gmail
+                </button>
+
+                <button class="social-login-btn microsoft" onclick="loginWithProvider('microsoft')">
+                    <span class="social-icon">🏢</span>
+                    Continue with Microsoft
+                </button>
+
+                <button class="social-login-btn phone" onclick="loginWithProvider('phone')">
+                    <span class="social-icon">📱</span>
+                    Continue with Phone
+                </button>
+            </div>
+
+            <div style="text-align: center; margin: 20px 0;">
+                <span style="color: var(--text-light);">OR</span>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <input type="email" id="loginEmail" placeholder="Email address" style="width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; margin-bottom: 10px;">
+                <div class="error-message" id="emailError">Please enter a valid email address</div>
+                
+                <input type="password" id="loginPassword" placeholder="Password" style="width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; margin-bottom: 10px;">
+                <div class="error-message" id="passwordError">Password must be at least 6 characters</div>
+            </div>
+
+            <button class="post-btn" style="width: 100%; background: var(--primary);" onclick="login()">Login</button>
+            
+            <p style="text-align: center; margin-top: 20px; color: var(--text-light);">
+                Don't have an account? <a href="#" style="color: var(--primary);" onclick="showSignup()">Sign up</a>
+            </p>
+
+            <!-- Quick Test Button -->
+            <button class="social-login-btn" style="margin-top: 15px; border-color: var(--gold); color: var(--gold);" onclick="quickLogin()">
+                🚀 Quick Test Login
+            </button>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar glass" id="mainNavbar">
+        <div class="logo">People Link</div>
+        <div class="nav-links">
+            <a href="#" class="active" onclick="showSection('home')">🏠 Home</a>
+            <a href="#" onclick="showReels()">🎬 Reels</a>
+            <a href="#" onclick="showMessages()">💬 Messages</a>
+            <a href="#" onclick="showGroups()">👥 Groups</a>
+            <a href="#" onclick="showWatch()">📺 Watch</a>
+            <a href="#" onclick="showMarketplace()">🛍️ Marketplace</a>
+            <a href="#" onclick="startVideoCall()">📞 Video Call</a>
+            <a href="#" onclick="goLive()">🔴 Go Live</a>
+        </div>
+        <div class="user-menu">
+            <div class="online-indicator"></div>
+            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150" alt="User" class="user-avatar" id="userAvatar">
+            <span class="verified-badge">✓</span>
+            <button class="media-btn" onclick="showSettings()">⚙️</button>
+            <button class="media-btn" onclick="logout()">🚪</button>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container" id="mainContainer">
+        <!-- Left Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-section glass">
+                <div class="user-profile">
+                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150" alt="User" class="user-avatar" style="width: 80px; height: 80px; display: block; margin: 0 auto 15px;">
+                    <h3 style="text-align: center; margin-bottom: 5px;" id="userName">John Doe <span class="verified-badge">✓</span></h3>
+                    <p style="text-align: center; color: var(--text-light); font-size: 14px;">🟢 Online</p>
+                </div>
+            </div>
+
+            <div class="sidebar-section glass">
+                <h4 style="margin-bottom: 15px;">Quick Actions</h4>
+                <div class="quick-actions">
+                    <button class="action-btn" onclick="showFriends()">👥 Friends</button>
+                    <button class="action-btn" onclick="createStory()">📷 Stories</button>
+                    <button class="action-btn" onclick="showReels()">🎬 Reels</button>
+                    <button class="action-btn" onclick="showMessages()">💬 Messages</button>
+                    <button class="action-btn" onclick="showGroups()">👥 Groups</button>
+                    <button class="action-btn" onclick="showWatch()">📺 Watch</button>
+                    <button class="action-btn" onclick="showMarketplace()">🛍️ Marketplace</button>
+                    <button class="action-btn" onclick="showVerificationPopup()">✅ Get Verified</button>
+                    <button class="action-btn" onclick="showPrivacySettings()">🔒 Privacy</button>
+                    <button class="action-btn" onclick="goLive()">🔴 Go Live</button>
+                </div>
+            </div>
+
+            <div class="sidebar-section glass">
+                <h4 style="margin-bottom: 15px;">Your Shortcuts</h4>
+                <div class="quick-actions">
+                    <button class="action-btn">🎮 Gamers Hub</button>
+                    <button class="action-btn">💼 Developers</button>
+                    <button class="action-btn">🎵 Music Lovers</button>
+                    <button class="action-btn">📚 Book Club</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Feed -->
+        <div class="feed">
+            <!-- Create Post -->
+            <div class="create-post glass fade-in">
+                <div class="post-header">
+                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150" alt="User" class="post-avatar">
+                    <textarea class="post-input" placeholder="What's on your mind?" rows="3" id="postContent"></textarea>
+                </div>
+                <div class="post-actions">
+                    <div class="media-buttons">
+                        <button class="media-btn" onclick="addPhoto()">📷 Photo</button>
+                        <button class="media-btn" onclick="addVideo()">🎬 Video</button>
+                        <button class="media-btn" onclick="addFeeling()">😊 Feeling</button>
+                        <button class="media-btn" onclick="goLive()">🔴 Live</button>
+                    </div>
+                    <button class="post-btn" onclick="createPost()">Post</button>
+                </div>
+            </div>
+
+            <!-- Sample Posts -->
+            <div class="post-card glass fade-in premium-border" id="post1">
+                <div class="post-header">
+                    <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150" alt="User" class="post-avatar">
+                    <div class="post-user-info">
+                        <div class="post-username">
+                            Sarah Johnson <span class="verified-badge">✓</span>
+                        </div>
+                        <div class="post-time">2 hrs ago · 🌐</div>
+                    </div>
+                    <button class="follow-btn" onclick="toggleFollow('sarah')" id="followSarah">Follow</button>
+                </div>
+                <div class="post-content">
+                    Just launched my new startup! 🚀 So excited to share this journey with all of you. 
+                    The future of social media is here with People Link! 
+                    #NewBeginnings #StartupLife #TechInnovation
+                </div>
+                <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?w=600" alt="Post" class="post-image">
+                <div class="post-stats">
+                    <span id="likes1">👍 2.5K</span>
+                    <span onclick="showComments('post1')">💬 348 comments</span>
+                    <span id="shares1">🔄 89 shares</span>
+                </div>
+                <div class="post-actions-buttons">
+                    <button class="post-action-btn" onclick="toggleLike('post1')" id="like1">👍 Like</button>
+                    <button class="post-action-btn" onclick="showComments('post1')">💬 Comment</button>
+                    <button class="post-action-btn" onclick="sharePost('post1')">🔄 Share</button>
+                    <button class="post-action-btn" onclick="showDownloadOptions()">📥 Download</button>
+                </div>
+                <div class="comments-section" id="comments1">
+                    <div class="comment">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40" alt="User" style="width: 35px; height: 35px; border-radius: 50%;">
+                        <div>
+                            <div style="font-weight: bold;">Mike Chen</div>
+                            <div>Amazing! Congratulations Sarah! 🎉</div>
+                        </div>
+                    </div>
+                    <input type="text" class="comment-input" placeholder="Write a comment..." onkeypress="addComment(event, 'post1')">
+                </div>
+            </div>
+
+            <div class="post-card glass fade-in" id="post2">
+                <div class="post-header">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150" alt="User" class="post-avatar">
+                    <div class="post-user-info">
+                        <div class="post-username">
+                            Mike Chen <span class="verified-badge">✓</span>
+                        </div>
+                        <div class="post-time">5 hrs ago · 🌐</div>
+                    </div>
+                    <button class="follow-btn following" onclick="toggleFollow('mike')" id="followMike">Following</button>
+                </div>
+                <div class="post-content">
+                    Beautiful sunset from my balcony today! 🌅 Sometimes we need to pause and appreciate 
+                    the simple things in life. What's making you happy today?
+                </div>
+                <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600" alt="Sunset" class="post-image">
+                <div class="post-stats">
+                    <span id="likes2">👍 1.2K</span>
+                    <span onclick="showComments('post2')">💬 167 comments</span>
+                    <span id="shares2">🔄 45 shares</span>
+                </div>
+                <div class="post-actions-buttons">
+                    <button class="post-action-btn" onclick="toggleLike('post2')" id="like2">👍 Like</button>
+                    <button class="post-action-btn" onclick="showComments('post2')">💬 Comment</button>
+                    <button class="post-action-btn" onclick="sharePost('post2')">🔄 Share</button>
+                    <button class="post-action-btn" onclick="showDownloadOptions()">📥 Download</button>
+                </div>
+                <div class="comments-section" id="comments2">
+                    <div class="comment">
+                        <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=40" alt="User" style="width: 35px; height: 35px; border-radius: 50%;">
+                        <div>
+                            <div style="font-weight: bold;">Sarah Johnson</div>
+                            <div>Stunning view! 😍</div>
+                        </div>
+                    </div>
+                    <input type="text" class="comment-input" placeholder="Write a comment..." onkeypress="addComment(event, 'post2')">
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Sidebar -->
+        <div class="right-sidebar">
+            <div class="sponsored-card glass">
+                <h4 style="margin-bottom: 15px;">💎 Sponsored</h4>
+                <div class="sponsored-item">
+                    <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=100" alt="Ad" style="width: 60px; height: 60px; border-radius: 10px;">
+                    <div>
+                        <div style="font-weight: bold;">Luxury Watch Collection</div>
+                        <div style="font-size: 12px; color: var(--text-light);">Premium timepieces</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="suggestions-card glass">
+                <h4 style="margin-bottom: 15px;">👥 People You May Know</h4>
+                <div class="suggestion-item">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" alt="User" class="suggestion-avatar">
+                    <div style="flex: 1;">
+                        <div style="font-weight: bold;">Alex Thompson</div>
+                        <div style="font-size: 12px; color: var(--text-light);">12 mutual friends</div>
+                    </div>
+                    <button class="follow-btn" onclick="toggleFollow('alex')" id="followAlex">Add</button>
+                </div>
+                <div class="suggestion-item">
+                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100" alt="User" class="suggestion-avatar">
+                    <div style="flex: 1;">
+                        <div style="font-weight: bold;">Emma Wilson</div>
+                        <div style="font-size: 12px; color: var(--text-light);">8 mutual friends</div>
+                    </div>
+                    <button class="follow-btn" onclick="toggleFollow('emma')" id="followEmma">Add</button>
+                </div>
+            </div>
+
+            <div class="sidebar-section glass">
+                <h4 style="margin-bottom: 15px;">🔒 Privacy Controls</h4>
+                <div class="quick-actions">
+                    <button class="action-btn" onclick="showPrivacySettings()">👀 Who can see your posts</button>
+                    <button class="action-btn" onclick="showContacts()">📞 Manage contacts</button>
+                    <button class="action-btn" onclick="showBlockedUsers()">🚫 Blocked users</button>
+                    <button class="action-btn" onclick="enableScreenshotProtection()">📸 Screenshot protection</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Security Badge -->
+    <div class="security-badge glass">
+        <div style="color: var(--secondary);">🔒</div>
+        <div>End-to-End Encrypted</div>
+    </div>
+
+    <!-- Messaging System -->
+    <div class="messaging-container" id="messagingContainer">
+        <div class="messages-header">
+            <h4>💬 Messages</h4>
+            <button class="media-btn" onclick="hideMessages()">✕</button>
+        </div>
+        <div class="messages-list">
+            <div class="suggestion-item" onclick="startChat('sarah')">
+                <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=100" alt="User" class="suggestion-avatar">
+                <div style="flex: 1;">
+                    <div style="font-weight: bold;">Sarah Johnson</div>
+                    <div style="font-size: 12px; color: var(--text-light);">Hello there! 👋</div>
+                </div>
+            </div>
+            <div class="suggestion-item" onclick="startChat('mike')">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100" alt="User" class="suggestion-avatar">
+                <div style="flex: 1;">
+                    <div style="font-weight: bold;">Mike Chen</div>
+                    <div style="font-size: 12px; color: var(--text-light);">Check out this amazing view! 🌅</div>
+                </div>
+            </div>
+        </div>
+        <div class="message-input-container">
+            <input type="text" class="message-input" placeholder="Type a message..." id="messageInput">
+            <button class="post-btn" style="padding: 10px 20px;" onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <!-- Video Call System -->
+    <div class="video-call-container" id="videoCallContainer">
+        <h3 style="margin-bottom: 20px;">📞 Video Call</h3>
+        <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 15px; margin-bottom: 30px;">
+            <p>Calling <strong>Sarah Johnson</strong>...</p>
+        </div>
+        <div class="video-call-actions">
+            <button class="call-btn accept" onclick="acceptCall()">📞</button>
+            <button class="call-btn end" onclick="endCall()">📞</button>
+            <button class="call-btn reject" onclick="rejectCall()">✕</button>
+        </div>
+    </div>
+
+    <!-- Reels System -->
+    <div class="reels-container" id="reelsContainer">
+        <video class="reel-video" controls>
+            <source src="#" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <button class="media-btn" style="position: absolute; top: 20px; right: 20px;" onclick="hideReels()">✕</button>
+    </div>
+
+    <!-- Verification Popup -->
+    <div class="modal glass premium-glow" id="verificationPopup">
+        <h3 style="margin-bottom: 20px; text-align: center;">✅ Get Verified</h3>
+        <div style="text-align: center; margin-bottom: 20px;">
+            <p>Get the blue verification badge and unlock premium features!</p>
+        </div>
+        <button class="post-btn" style="width: 100%;" onclick="closeModal('verificationPopup')">Close</button>
+    </div>
+
+    <!-- Notification System -->
+    <div class="notification" id="globalNotification"></div>
+
+    <script>
+        // User Database (Local Storage)
+        const users = JSON.parse(localStorage.getItem('peopleLinkUsers')) || [
+            {
+                id: 1,
+                email: 'user@example.com',
+                password: 'password123',
+                name: 'John Doe',
+                avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150',
+                verified: true
+            }
+        ];
+
+        // Current User
+        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
+        // Check if user is already logged in
+        window.onload = function() {
+            if (currentUser) {
+                showMainApp();
+            } else {
+                showLogin();
+            }
+        };
+
+        // Login Functions
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        function validatePassword(password) {
+            return password.length >= 6;
+        }
+
+        function showError(elementId, show) {
+            const element = document.getElementById(elementId);
+            element.style.display = show ? 'block' : 'none';
+        }
+
+        function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // Reset errors
+            showError('emailError', false);
+            showError('passwordError', false);
+
+            let isValid = true;
+
+            // Validate email
+            if (!validateEmail(email)) {
+                showError('emailError', true);
+                isValid = false;
+            }
+
+            // Validate password
+            if (!validatePassword(password)) {
+                showError('passwordError', true);
+                isValid = false;
+            }
+
+            if (!isValid) {
+                showNotification('Please fix the errors above', 'error');
+                return;
+            }
+
+            // Check credentials
+            const user = users.find(u => u.email === email && u.password === password);
+            
+            if (user) {
+                // Successful login
+                currentUser = user;
+                localStorage.setItem('currentUser', JSON.stringify(user));
+                showMainApp();
+                showNotification('Welcome back, ' + user.name + '!', 'success');
+            } else {
+                showNotification('Invalid email or password', 'error');
+            }
+        }
+
+        function loginWithProvider(provider) {
+            showNotification('Connecting with ' + provider + '...', 'info');
+            // In a real app, this would redirect to OAuth flow
+            setTimeout(() => {
+                showNotification(provider + ' login is not implemented in this demo', 'info');
+            }, 1000);
+        }
+
+        function quickLogin() {
+            // Auto login with demo account
+            document.getElementById('loginEmail').value = 'user@example.com';
+            document.getElementById('loginPassword').value = 'password123';
+            login();
+        }
+
+        function showMainApp() {
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('mainNavbar').style.display = 'flex';
+            document.getElementById('mainContainer').style.display = 'grid';
+            
+            // Update user info
+            if (currentUser) {
+                document.getElementById('userName').textContent = currentUser.name;
+                document.getElementById('userAvatar').src = currentUser.avatar;
+            }
+        }
+
+        function showLogin() {
+            document.getElementById('loginContainer').style.display = 'flex';
+            document.getElementById('mainNavbar').style.display = 'none';
+            document.getElementById('mainContainer').style.display = 'none';
+        }
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            showLogin();
+            showNotification('Logged out successfully', 'success');
+        }
+
+        // Notification System
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('globalNotification');
+            notification.textContent = message;
+            notification.className = 'notification active';
+            
+            // Set color based on type
+            if (type === 'error') {
+                notification.style.background = '#ff6b6b';
+            } else if (type === 'success') {
+                notification.style.background = '#42b72a';
+            } else {
+                notification.style.background = '#1877f2';
+            }
+            
+            setTimeout(() => {
+                notification.classList.remove('active');
+            }, 3000);
+        }
+
+        // Post System
+        function createPost() {
+            if (!currentUser) {
+                showNotification('Please login to create posts', 'error');
+                return;
+            }
+
+            const content = document.getElementById('postContent').value.trim();
+            if (!content) {
+                showNotification('Please write something to post', 'error');
+                return;
+            }
+
+            showNotification('Post created successfully!', 'success');
+            document.getElementById('postContent').value = '';
+            
+            // In a real app, you would save the post to database here
+        }
+
+        // Like System
+        function toggleLike(postId) {
+            if (!currentUser) {
+                showNotification('Please login to like posts', 'error');
+                return;
+            }
+
+            const likeBtn = document.getElementById(`like${postId.slice(-1)}`);
+            const likesSpan = document.getElementById(`likes${postId.slice(-1)}`);
+            
+            if (likeBtn.classList.contains('active')) {
+                likeBtn.classList.remove('active');
+                likeBtn.innerHTML = '👍 Like';
+                // Update likes count (decrease)
+                const currentLikes = parseInt(likesSpan.textContent.match(/\d+/)[0]);
+                likesSpan.textContent = `👍 ${(currentLikes - 1).toLocaleString()}`;
+            } else {
+                likeBtn.classList.add('active');
+                likeBtn.innerHTML = '👍 Liked';
+                // Update likes count (increase)
+                const currentLikes = parseInt(likesSpan.textContent.match(/\d+/)[0]);
+                likesSpan.textContent = `👍 ${(currentLikes + 1).toLocaleString()}`;
+                showNotification('You liked this post', 'success');
+            }
+        }
+
+        // Comment System
+        function showComments(postId) {
+            const commentsSection = document.getElementById(`comments${postId.slice(-1)}`);
+            commentsSection.classList.toggle('active');
+        }
+
+        function addComment(event, postId) {
+            if (event.key === 'Enter' && event.target.value.trim()) {
+                if (!currentUser) {
+                    showNotification('Please login to comment', 'error');
+                    return;
+                }
+                
+                showNotification('Comment added!', 'success');
+                event.target.value = '';
+            }
+        }
+
+        // Follow System
+        function toggleFollow(userId) {
+            if (!currentUser) {
+                showNotification('Please login to follow users', 'error');
+                return;
+            }
+
+            const followBtn = document.getElementById(`follow${userId.charAt(0).toUpperCase() + userId.slice(1)}`);
+            
+            if (followBtn.classList.contains('following')) {
+                followBtn.classList.remove('following');
+                followBtn.textContent = 'Follow';
+                showNotification(`Unfollowed ${userId}`, 'info');
+            } else {
+                followBtn.classList.add('following');
+                followBtn.textContent = 'Following';
+                showNotification(`Following ${userId}`, 'success');
+            }
+        }
+
+        // Modal System
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Other UI Functions
+        function showMessages() {
+            if (!currentUser) {
+                showNotification('Please login to use messaging', 'error');
+                return;
+            }
+            document.getElementById('messagingContainer').classList.add('active');
+        }
+
+        function hideMessages() {
+            document.getElementById('messagingContainer').classList.remove('active');
+        }
+
+        function showReels() {
+            if (!currentUser) {
+                showNotification('Please login to watch reels', 'error');
+                return;
+            }
+            document.getElementById('reelsContainer').classList.add('active');
+        }
+
+        function hideReels() {
+            document.getElementById('reelsContainer').classList.remove('active');
+        }
+
+        function showVerificationPopup() {
+            document.getElementById('verificationPopup').classList.add('active');
+        }
+
+        function startVideoCall() {
+            if (!currentUser) {
+                showNotification('Please login to start video calls', 'error');
+                return;
+            }
+            document.getElementById('videoCallContainer').classList.add('active');
+        }
+
+        function endCall() {
+            document.getElementById('videoCallContainer').classList.remove('active');
+            showNotification('Call ended', 'info');
+        }
+
+        // Demo functions for other features
+        function showSignup() {
+            showNotification('Signup feature coming soon!', 'info');
+        }
+
+        function showSection(section) {
+            showNotification(`Showing ${section} section`, 'info');
+        }
+
+        function showFriends() {
+            showNotification('Friends list opened', 'info');
+        }
+
+        function createStory() {
+            if (!currentUser) {
+                showNotification('Please login to create stories', 'error');
+                return;
+            }
+            showNotification('Story created!', 'success');
+        }
+
+        function showGroups() {
+            showNotification('Groups section opened', 'info');
+        }
+
+        function showWatch() {
+            showNotification('Watch section opened', 'info');
+        }
+
+        function showMarketplace() {
+            showNotification('Marketplace opened', 'info');
+        }
+
+        function goLive() {
+            if (!currentUser) {
+                showNotification('Please login to go live', 'error');
+                return;
+            }
+            showNotification('Live streaming started!', 'success');
+        }
+
+        function showPrivacySettings() {
+            showNotification('Privacy settings opened', 'info');
+        }
+
+        function showSettings() {
+            showNotification('Settings opened', 'info');
+        }
+
+        function addPhoto() {
+            if (!currentUser) {
+                showNotification('Please login to add photos', 'error');
+                return;
+            }
+            showNotification('Photo upload dialog opened', 'info');
+        }
+
+        function addVideo() {
+            if (!currentUser) {
+                showNotification('Please login to add videos', 'error');
+                return;
+            }
+            showNotification('Video upload dialog opened', 'info');
+        }
+
+        function addFeeling() {
+            if (!currentUser) {
+                showNotification('Please login to add feelings', 'error');
+                return;
+            }
+            showNotification('Feeling selector opened', 'info');
+        }
+
+        function sharePost(postId) {
+            if (!currentUser) {
+                showNotification('Please login to share posts', 'error');
+                return;
+            }
+            showNotification('Post shared!', 'success');
+        }
+
+        function showDownloadOptions() {
+            showNotification('Download options opened', 'info');
+        }
+
+        function startChat(user) {
+            if (!currentUser) {
+                showNotification('Please login to start chatting', 'error');
+                return;
+            }
+            showNotification(`Starting chat with ${user}...`, 'info');
+        }
+
+        function sendMessage() {
+            const messageInput = document.getElementById('messageInput');
+            if (messageInput.value.trim()) {
+                showNotification('Message sent!', 'success');
+                messageInput.value = '';
+            }
+        }
+
+        function acceptCall() {
+            showNotification('Call accepted!', 'success');
+        }
+
+        function rejectCall() {
+            document.getElementById('videoCallContainer').classList.remove('active');
+            showNotification('Call rejected', 'info');
+        }
+    </script>
+</body>
+</html>
