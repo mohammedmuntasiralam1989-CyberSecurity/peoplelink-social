@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>People Link - Premium Social Network</title>
+    <style>
+        /* Reset & Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #1877f2;
+            --secondary: #42b72a;
+            --accent: #ff6b6b;
+            --dark: #1c1e21;
+            --darker: #121212;
+            --light: #f0f2f5;
+            --text: #333;
+            --text-light: #65676b;
+            --gold: #ffd700;
+            --silver: #c0c0c0;
+            --bronze: #cd7f32;
+        }
+
+        body {
+            background: var(--darker);
+            color: white;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Luxury Glass Morphism Effect */
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+        }
+
+        .premium-glow {
+            box-shadow: 0 8px 32px rgba(255, 215, 0, 0.3);
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(28, 30, 33, 0.95);
+            backdrop-filter: blur(20px);
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .nav-links a.active {
+            background: var(--primary);
+        }
+
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 2px solid var(--gold);
+            object-fit: cover;
+        }
+
+        .verified-badge {
+            color: var(--gold);
+            font-size: 16px;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 80px auto 20px;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 300px 1fr 350px;
+            gap: 20px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .sidebar-section {
+            margin-bottom: 20px;
+            padding: 25px;
+        }
+
+        .quick-actions .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            color: white;
+            border-radius: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 16px;
+        }
+
+        .quick-actions .action-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(10px);
+        }
+
+        /* Feed */
+        .feed {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .create-post {
+            padding: 25px;
+        }
+
+        .post-input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            color: white;
+            font-size: 16px;
+            resize: none;
+            margin-bottom: 15px;
+        }
+
+        .post-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .post-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .media-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .media-btn {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            padding: 10px 15px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .media-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .post-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .post-btn:hover {
+            background: #166fe5;
+            transform: translateY(-2px);
+        }
+
+        /* Post Card */
+        .post-card {
+            padding: 25px;
+            position: relative;
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .post-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid var(--primary);
+        }
+
+        .post-user-info {
+            flex: 1;
+        }
+
+        .post-username {
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .post-time {
+            color: var(--text-light);
+            font-size: 14px;
+        }
+
+        .post-content {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .post-image {
+            width: 100%;
+            border-radius: 15px;
+            margin-bottom: 15px;
+        }
+
+        .post-stats {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-light);
+            font-size: 14px;
+            padding: 15px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .post-actions-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            padding-top: 15px;
+        }
+
+        .post-action-btn {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .post-action-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .post-action-btn.active {
+            color: var(--primary);
+            background: rgba(24, 119, 242, 0.1);
+        }
+
+        /* Right Sidebar */
+        .right-sidebar {
+            position: sticky;
+            top: 100px;
+            height: fit-content;
+        }
+
+        .sponsored-card, .suggestions-card {
+            margin-bottom: 20px;
+            padding: 25px;
+        }
+
+        .sponsored-item, .suggestion-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .sponsored-item:hover, .suggestion-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .suggestion-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .follow-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .follow-btn:hover {
+            background: #166fe5;
+        }
+
+        .follow-btn.following {
+            background: var(--secondary);
+        }
+
+        /* Security Badge */
+        .security-badge {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 15px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+        }
+
+        /* Online Status */
+        .online-indicator {
+            width: 12px;
+            height: 12px;
+            background: var(--secondary);
+            border-radius: 50%;
+            border: 2px solid var(--darker);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .container {
+                grid-template-columns: 250px 1fr;
+            }
+            .right-sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                padding: 10px;
+            }
+            .sidebar {
+                display: none;
+            }
+            .navbar {
+                padding: 15px;
+            }
+            .nav-links {
+                display: none;
+            }
+        }
+
+        /* Luxury Effects */
+        .premium-border {
+            position: relative;
+        }
+
+        .premium-border::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--gold), var(--primary), var(--accent));
+            border-radius: 22px;
+            z-index: -1;
+            animation: borderGlow 3s ease-in-out infinite;
+        }
+
+        @keyframes borderGlow {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        /* All System Modals */
+        .modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--darker);
+            padding: 30px;
+            border-radius: 20px;
+            z-index: 2000;
+            display: none;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .modal.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .promo-code-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            margin: 15px 0;
+            font-size: 16px;
+        }
+
+        /* Messaging System */
+        .messaging-container {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            width: 350px;
+            height: 500px;
+            background: var(--darker);
+            border-radius: 15px;
+            z-index: 1000;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: none;
+            flex-direction: column;
+        }
+
+        .messaging-container.active {
+            display: flex;
+        }
+
+        .messages-header {
+            padding: 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            justify-content: between;
+            align-items: center;
+        }
+
+        .messages-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        .message-input-container {
+            padding: 15px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            gap: 10px;
+        }
+
+        .message-input {
+            flex: 1;
+            padding: 10px 15px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.05);
+            border: none;
+            color: white;
+        }
+
+        /* Reels System */
+        .reels-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            z-index: 1000;
+            display: none;
+        }
+
+        .reels-container.active {
+            display: block;
+        }
+
+        .reel-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Video Call System */
+        .video-call-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--darker);
+            z-index: 1000;
+            display: none;
+        }
+
+        .video-call-container.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-call-actions {
+            position: absolute;
+            bottom: 50px;
+            display: flex;
+            gap: 20px;
+        }
+
+        .call-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .call-btn.accept {
+            background: var(--secondary);
+            color: white;
+        }
+
+        .call-btn.reject {
+            background: var(--accent);
+            color: white;
+        }
+
+        .call-btn.end {
+            background: var(--accent);
+            color: white;
+        }
+
+        /* Live Stream System */
+        .live-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: black;
+            z-index: 1000;
+            display: none;
+        }
+
+        .live-container.active {
+            display: block;
+        }
+
+        /* Login System */
+        .login-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .auth-card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .social-login-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .social-login-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            background: white;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+
+        .social-login-btn.gmail {
+            border-color: #db4437;
+            color: #db4437;
+        }
+
+        .social-login-btn.gmail:hover {
+            background: #db4437;
+            color: white;
+        }
+
+        .social-login-btn.microsoft {
+            border-color: #0078d4;
+            color: #0078d4;
+        }
+
+        .social-login-btn.microsoft:hover {
+            background: #0078d4;
+            color: white;
+        }
+
+        .social-login-btn.phone {
+            border-color: #28a745;
+            color: #28a745;
+        }
+
+        .social-login-btn.phone:hover {
+            background: #28a745;
+            color: white;
+        }
+
+        /* Global Modal Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1999;
+            display: none;
+        }
+
+        .modal-overlay.active {
+            display: block;
+        }
+
+        /* Notification System */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--primary);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            z-index: 1000;
+            display: none;
+        }
+
+        .notification.active {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); }
+            to { transform: translateX(0); }
+        }
+
+        /* Comment System */
+        .comments-section {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            display: none;
+        }
+
+        .comments-section.active {
+            display: block;
+        }
+
+        .comment {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .comment-input {
+            width: 100%;
+            padding: 10px 15px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.05);
+            border: none;
+            color: white;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Login System -->
+    <div class="login-container" id="loginContainer">
+        <div class="auth-card">
+            <h2 style="text-align: center; margin-bottom: 10px; color: var(--dark);">Welcome to People Link</h2>
+            <p style="text-align: center; color: var(--text-light); margin-bottom: 30px;">Join the premium social network</p>
+            
+            <div class="social-login-options">
+                <button class="social-login-btn gmail" onclick="loginWithProvider('gmail')">
+                    <span class="social-icon">📧</span>
+                    Continue with Gmail
+                </button>
+
+                <button class="social-login-btn microsoft" onclick="loginWithProvider('microsoft')">
+                    <span class="social-icon">🏢</span>
+                    Continue with Microsoft
+                </button>
+
+                <button class="social-login-btn phone" onclick="loginWithProvider('phone')">
+                    <span class="social-icon">📱</span>
+                    Continue with Phone
+                </button>
+            </div>
+
+            <div style="text-align: center; margin: 20px 0;">
+                <span style="color: var(--text-light);">OR</span>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <input type="email" id="loginEmail" placeholder="Email address" style="width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; margin-bottom: 15px;">
+                <input type="password" id="loginPassword" placeholder="Password" style="width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px;">
+            </div>
+
+            <button class="post-btn" style="width: 100%; background: var(--primary);" onclick="login()">Login</button>
+            
+            <p style="text-align: center; margin-top: 20px; color: var(--text-light);">
+                Don't have an account? <a href="#" style="color: var(--primary);" onclick="showSignup()">Sign up</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar glass" style="display: none;" id="mainNavbar">
+        <div class="logo">People Link</div>
+        <div class="nav-links">
+            <a href="#" class="active" onclick="showSection('home')">🏠 Home</a>
+            <a href="#" onclick="showReels()">🎬 Reels</a>
+            <a href="#" onclick="showMessages()">💬 Messages</a>
+            <a href="#" onclick="showGroups()">👥 Groups</a>
+            <a href="#" onclick="showWatch()">📺 Watch</a>
+            <a href="#" onclick="showMarketplace()">🛍️ Marketplace</a>
+            <a href="#" onclick="startVideoCall()">📞 Video Call</a>
+            <a href="#" onclick="goLive()">🔴 Go Live</a>
+        </div>
+        <div class="user-menu">
+            <div class="online-indicator"></div>
+            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150" alt="User" class="user-avatar" id="userAvatar">
+            <span class="verified-badge">✓</span>
+            <button class="media-btn" onclick="showSettings()">⚙️</button>
+            <button class="media-btn" onclick="logout()">🚪</button>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container" style="display: none;" id="mainContainer">
+        <!-- Left Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-section glass">
+                <div class="user-profile">
+                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150" alt="User" class="user-avatar" style="width: 80px; height: 80px; display: block; margin: 0 auto 15px;">
+                    <h3 style="text-align: center; margin-bottom: 5px;" id="userName">John Doe <span class="verified-badge">✓</span></h3>
+                    <p style="text-align: center; color: var(--text-light); font-size: 14px;">🟢 Online</p>
+                </div>
+            </div>
+
+            <div class="sidebar-section glass">
+                <h4 style="margin-bottom: 15px;">Quick Actions</h4>
+                <div class="quick-actions">
+                    <button class="action-btn" onclick="showFriends()">👥 Friends</button>
+                    <button class="action-btn" onclick="createStory()">📷 Stories</button>
+                    <button class="action-btn" onclick="showReels()">🎬 Reels</button>
+                    <button class="action-btn" onclick="showMessages()">💬 Messages</button>
+                    <button class="action-btn" onclick="showGroups()">👥 Groups</button>
+                    <button class="action-btn" onclick="showWatch()">📺 Watch</button>
+                    <button class="action-btn" onclick="showMarketplace()">🛍️ Marketplace</button>
+                    <button class="action-btn" onclick="showVerificationPopup()">✅ Get Verified</button>
+                    <button class="action-btn" onclick="showPrivacySettings()">🔒 Privacy</button>
+                    <button class="action-btn" onclick="goLive()">🔴 Go Live</button>
+                </div>
+            </div>
+
+            <div class="sidebar-section glass">
+                <h4 style="margin-bottom: 15px;">Your Shortcuts</h4>
+                <div class="quick-actions">
+                    <button class="action-btn">🎮 Gamers Hub</button>
+                    <button class="action-btn">💼 Developers</button>
+                    <button class="action-btn">🎵 Music Lovers</button>
+                    <button class="action-btn">📚 Book Club</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Feed -->
+        <div class="feed">
+            <!-- Create Post -->
+            <div class="create-post glass fade-in">
+                <div class="post-header">
+                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150" alt="User" class="post-avatar">
+                    <textarea class="post-input" placeholder="What's on your mind?" rows="3" id="postContent"></textarea>
+                </div>
+                <div class="post-actions">
+                    <div class="media-buttons">
+                        <button class="media-btn" onclick="addPhoto()">📷 Photo</button>
+                        <button class="media-btn" onclick="addVideo()">🎬 Video</button>
+                        <button class="media-btn" onclick="addFeeling()">😊 Feeling</button>
+                        <button class="media-btn" onclick="goLive()">🔴 Live</button>
+                    </div>
+                    <button class="post-btn" onclick="createPost()">Post</button>
+                </div>
+            </div>
+
+            <!-- Sample Posts -->
+            <div class="post-card glass fade-in premium-border" id="post1">
+                <div class="post-header">
+                    <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150" alt="User" class="post-avatar">
+                    <div class="post-user-info">
+                        <div class="post-username">
+                            Sarah Johnson <span class="verified-badge">✓</span>
+                        </div>
+                        <div class="post-time">2 hrs ago · 🌐</div>
+                    </div>
+                    <button class="follow-btn" onclick="toggleFollow('sarah')">Follow</button>
+                </div>
+                <div class="post-content">
+                    Just launched my new startup! 🚀 So excited to share this journey with all of you. 
+                    The future of social media is here with People Link! 
+                    #NewBeginnings #StartupLife #TechInnovation
+                </div>
+                <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?w=600" alt="Post" class="post-image">
+                <div class="post-stats">
+                    <span id="likes1">👍 2.5K</span>
+                    <span onclick="showComments('post1')">💬 348 comments</span>
+                    <span id="shares1">🔄 89 shares</span>
+                </div>
+                <div class="post-actions-buttons">
+                    <button class="post-action-btn" onclick="toggleLike('post1')">👍 Like</button>
+                    <button class="post-action-btn" onclick="showComments('post1')">💬 Comment</button>
+                    <button class="post-action-btn" onclick="sharePost('post1')">🔄 Share</button>
+                    <button class="post-action-btn" onclick="showDownloadOptions()">📥 Download</button>
+                </div>
+                <div class="comments-section" id="comments1">
+                    <div class="comment">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40" alt="User" style="width: 35px; height: 35px; border-radius: 50%;">
+                        <div>
+                            <div style="font-weight: bold;">Mike Chen</div>
+                            <div>Amazing! Congratulations Sarah! 🎉</div>
+                        </div>
+                    </div>
+                    <input type="text" class="comment-input" placeholder="Write a comment..." onkeypress="addComment(event, 'post1')">
+                </div>
+            </div>
+
+            <div class="post-card glass fade-in" id="post2">
+                <div class="post-header">
+                    <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150" alt="User" class="post-avatar">
+                    <div class="post-user-info">
+                        <div class="post-username">
+                            Mike Chen <span class="verified-badge">✓</span>
+                        </div>
+                        <div class="post-time">5 hrs ago · 🌐</div>
+                    </div>
+                    <button class="follow-btn following" onclick="toggleFollow('mike')">Following</button>
+                </div>
+                <div class="post-content">
+                    Beautiful sunset from my balcony today! 🌅 Sometimes we need to pause and appreciate 
+                    the simple things in life. What's making you happy today?
+                </div>
+                <img src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600" alt="Sunset" class="post-image">
+                <div class="post-stats">
+                    <span id="likes2">👍 1.2K</span>
+                    <span onclick="showComments('post2')">💬 167 comments</span>
+                    <span id="shares2">🔄 45 shares</span>
+                </div>
+                <div class="post-actions-buttons">
+                    <button class="post-action-btn" onclick="toggleLike('post2')">👍 Like</button>
+                    <button class="post-action-btn" onclick="showComments('post2')">💬 Comment</button>
+                    <button class="post-action-btn" onclick="sharePost('post2')">🔄 Share</button>
+                    <button class="post-action-btn" onclick="showDownloadOptions()">📥 Download</button>
+                </div>
+                <div class="comments-section" id="comments2">
+                    <div class="comment">
+                        <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=40" alt="User" style="width: 35px; height: 35px; border-radius: 50%;">
+                        <div>
+                            <div style="font-weight: bold;">Sarah Johnson</div>
+                            <div>Stunning view! 😍</div>
+                        </div>
+                    </div>
+                    <input type="text" class="comment-input" placeholder="Write a comment..." onkeypress="addComment(event, 'post2')">
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Sidebar -->
+        <div class="right-sidebar">
+            <div class="sponsored-card glass">
+                <h4 style="margin-bottom: 15px;">💎 Sponsored</h4>
+                <div class="sponsored-item">
+                    <img src="https://images.unsplash.com/photo-1563013544-824ae1b704d3?w=100" alt="Ad" style="width: 60px; height: 60px; border-radius: 10px;">
+                    <div>
+                        <div style="font-weight: bold;">Luxury Watch Collection</div>
+                        <div style="font-size: 12px; color: var(--text-light);">Premium timepieces</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="suggestions-card glass">
+                <h4 style="margin-bottom: 15px;">👥 People You May Know</h4>
+                <div class="suggestion-item">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100" alt="User" class="suggestion-avatar">
+                    <div style="flex: 1;">
+                        <div style="font-weight: bold;">Alex Thompson</div>
+                        <div style="font-size: 12px; color: var(--text-light);">12 mutual friends</div>
+                    </div>
+                    <button class="follow-btn" onclick="toggleFollow('alex')">Add</button>
+                </div>
+                <div class="suggestion-item">
+                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100" alt="User" class="suggestion-avatar">
+                    <div style="flex: 1;">
+                        <div style="font-weight: bold;">Emma Wilson</div>
+                        <div style="font-size: 12px; color: var(--text-light);">8 mutual friends</div>
+                    </div>
+                    <button class="follow-btn" onclick="toggleFollow('emma')">Add</button>
+                </div>
+            </div>
+
+            <div class="sidebar-section glass">
+                <h4 style="margin-bottom: 15px;">🔒 Privacy Controls</h4>
+                <div class="quick-actions">
+                    <button class="action-btn" onclick="showPrivacySettings()">👀 Who can see your posts</button>
+                    <button class="action-btn" onclick="showContacts()">📞 Manage contacts</button>
+                    <button class="action-btn" onclick="showBlockedUsers()">🚫 Blocked users</button>
+                    <button class="action-btn" onclick="enableScreenshotProtection()">📸 Screenshot protection</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Security Badge -->
+    <div class="security-badge glass">
+        <div style="color: var(--secondary);">🔒</div>
+        <div>End-to-End Encrypted</div>
+    </div>
+
+    <!-- All System Modals -->
+    <div class="modal glass premium-glow" id="verificationPopup">
+        <h3 style="margin-bottom: 20px; text-align: center;">✅ Get Verified</h3>
+        <div style="text-align: center; margin-bottom: 20px;">
+            <p>Get the blue verification badge and unlock premium features!</p>
+        </div>
+        
+        <div style="background: rgba(255, 215, 0, 0.1); padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+            <h4 style="color: var(--gold); margin-bottom: 10px;">🎁 Special Offer</h4>
+            <p style="font-size: 14px;">Use promo code for FREE verification:</p>
+            <input type="text" class="promo-code-input"
