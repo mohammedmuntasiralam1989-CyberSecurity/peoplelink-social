@@ -1,0 +1,702 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>People Link - আপনার গল্প, মার্জিনে লাক্স</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* === CSS RESET & VARIABLES === */
+        :root {
+            --royal-blue: #0F52BA;
+            --gold: #D4AF37;
+            --gold-light: #FFD700;
+            --off-white: #F6F7F9;
+            --navy-dark: #0F1724;
+            --navy-light: #1E293B;
+            --text-light: #E6EEF6;
+            --text-gray: #94A3B8;
+            --success: #10B981;
+            --error: #EF4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--navy-dark), var(--navy-light));
+            color: var(--off-white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* === UTILITY CLASSES === */
+        .gold-text { color: var(--gold); }
+        .text-center { text-align: center; }
+        .hidden { display: none; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 2rem;
+        }
+
+        /* === NAVBAR === */
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background: rgba(15, 23, 36, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .nav-brand h2 {
+            font-family: 'Playfair Display', serif;
+            color: var(--gold);
+            font-size: 1.8rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--text-light);
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .btn-login {
+            border: 1px solid var(--gold);
+            color: var(--gold);
+        }
+
+        .btn-signup {
+            background: var(--gold);
+            color: var(--navy-dark);
+            font-weight: 600;
+        }
+
+        .btn-login:hover, .btn-signup:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+        }
+
+        /* === HERO SECTION === */
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8% 10% 5%;
+            min-height: 100vh;
+            margin-top: 60px;
+        }
+
+        .hero-content {
+            flex: 1;
+            max-width: 600px;
+        }
+
+        .hero-content h1 {
+            font-size: 3.5rem;
+            font-family: 'Playfair Display', serif;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            color: var(--text-gray);
+            margin-bottom: 2rem;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary, .btn-secondary {
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background: var(--gold);
+            color: var(--navy-dark);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--gold);
+            border: 2px solid var(--gold);
+        }
+
+        .btn-primary:hover, .btn-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.4);
+        }
+
+        .hero-visual {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .mockup-glass-card {
+            width: 350px;
+            height: 450px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .verified-badge-gold {
+            width: 80px;
+            height: 80px;
+            background: radial-gradient(circle, var(--gold-light), var(--gold));
+            border-radius: 50%;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 0 30px rgba(212, 175, 55, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: var(--navy-dark);
+        }
+
+        .verified-badge-gold::after {
+            content: "✓";
+            font-weight: bold;
+        }
+
+        /* === FEATURES SECTION === */
+        .features {
+            padding: 5rem 10%;
+            background: rgba(15, 23, 36, 0.8);
+        }
+
+        .section-title {
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--gold);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: var(--gold);
+        }
+
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--gold);
+        }
+
+        /* === AUTH PAGES === */
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            margin-top: 60px;
+        }
+
+        .auth-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            padding: 3rem;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            width: 100%;
+            max-width: 450px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .auth-title {
+            text-align: center;
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: var(--gold);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 1rem;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-light);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.3);
+        }
+
+        .auth-switch {
+            text-align: center;
+            margin-top: 2rem;
+            color: var(--text-gray);
+        }
+
+        .auth-switch a {
+            color: var(--gold);
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        /* === PROFILE PAGE === */
+        .profile-container {
+            max-width: 1200px;
+            margin: 80px auto 2rem;
+            padding: 0 2rem;
+        }
+
+        .profile-cover {
+            height: 300px;
+            background: linear-gradient(135deg, var(--royal-blue), var(--navy-light));
+            border-radius: 20px;
+            position: relative;
+            margin-bottom: 100px;
+            overflow: hidden;
+        }
+
+        .profile-avatar {
+            position: absolute;
+            bottom: -50px;
+            left: 50px;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 5px solid var(--navy-dark);
+            background: var(--navy-light);
+            overflow: hidden;
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .verified-badge-large {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle, var(--gold-light), var(--gold));
+            border-radius: 50%;
+            border: 3px solid var(--navy-dark);
+        }
+
+        .profile-info {
+            padding: 2rem;
+        }
+
+        .profile-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .profile-stats {
+            display: flex;
+            gap: 2rem;
+            margin: 1.5rem 0;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gold);
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-gray);
+        }
+
+        /* === VERIFICATION FLOW === */
+        .verification-steps {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--navy-light);
+            color: var(--text-gray);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            border: 2px solid var(--text-gray);
+        }
+
+        .step.active .step-number {
+            background: var(--gold);
+            color: var(--navy-dark);
+            border-color: var(--gold);
+        }
+
+        .step.completed .step-number {
+            background: var(--success);
+            color: white;
+            border-color: var(--success);
+        }
+
+        .upload-area {
+            border: 2px dashed var(--gold);
+            border-radius: 15px;
+            padding: 3rem;
+            text-align: center;
+            margin: 2rem 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .upload-area:hover {
+            background: rgba(212, 175, 55, 0.1);
+        }
+
+        /* === RESPONSIVE DESIGN === */
+        @media (max-width: 768px) {
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                padding: 5% 1rem;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-buttons {
+                justify-content: center;
+            }
+
+            .mockup-glass-card {
+                width: 280px;
+                height: 350px;
+                margin-top: 2rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-name {
+                font-size: 2rem;
+            }
+
+            .profile-stats {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-brand">
+            <h2>People Link</h2>
+        </div>
+        <div class="nav-links">
+            <a href="#features" class="btn-login">ফিচারসমূহ</a>
+            <a href="#verification" class="btn-login">যাচাইকরণ</a>
+            <a href="javascript:void(0)" onclick="showLogin()" class="btn-login">লগইন</a>
+            <a href="javascript:void(0)" onclick="showSignup()" class="btn-signup">নিবন্ধন</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>আপনার গল্প, <span class="gold-text">মার্জিনে লাক্স</span></h1>
+            <p>People Link-এ যোগ দিন — একটি Privacy-First, Verified Social Network যেখানে আপনার পরিচয়ই আপনার সবচেয়ে বড় সম্পদ।</p>
+            <div class="hero-buttons">
+                <a href="javascript:void(0)" onclick="showSignup()" class="btn-primary">ফ্রি একাউন্ট খুলুন</a>
+                <a href="#features" class="btn-secondary">ফিচার এক্সপ্লোর করুন</a>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="mockup-glass-card">
+                <div class="verified-badge-gold"></div>
+                <h3 style="color: var(--gold); margin-bottom: 0.5rem;">Verified Profile</h3>
+                <p style="color: var(--text-gray); text-align: center;">গোল্ড ব্যাজ প্রাপ্ত ব্যবহারকারী</p>
+                <div style="margin-top: 2rem; padding: 1rem; background: rgba(255,255,255,0.1); border-radius: 10px;">
+                    <p style="font-size: 0.9rem; color: var(--text-light);">✔️ প্রাইওরিটি সার্চ</p>
+                    <p style="font-size: 0.9rem; color: var(--text-light);">✔️ ভ্যানিটি URL</p>
+                    <p style="font-size: 0.9rem; color: var(--text-light);">✔️ হাইয়ার রিচ</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <h2 class="section-title">আমাদের এক্সক্লুসিভ ফিচারসমূহ</h2>
+        <div class="features-grid">
+            <div class="feature-card glass-card">
+                <div class="feature-icon">✓</div>
+                <h3>Paid Verification</h3>
+                <p>গোল্ড ভেরিফাইড ব্যাজ পান। আপনার পরিচয় যাচাই করুন এবং কমিউনিটিতে আলাদা হয়ে উঠুন।</p>
+            </div>
+            <div class="feature-card glass-card">
+                <div class="feature-icon">🎨</div>
+                <h3>Luxury Profiles</h3>
+                <p>কাস্টম প্রোফাইল থিম, গ্লাসমরফিজম ডিজাইন, এবং প্রিমিয়াম লুক দিয়ে আপনার প্রোফাইলকে সাজান।</p>
+            </div>
+            <div class="feature-card glass-card">
+                <div class="feature-icon">🔒</div>
+                <h3>Privacy First</h3>
+                <p>ডিফল্ট প্রাইভেসি সেটিংস, গ্রানুলার অডিয়েন্স কন্ট্রোল, এবং এপিমেরাল কন্টেন্ট।</p>
+            </div>
+            <div class="feature-card glass-card">
+                <div class="feature-icon">📊</div>
+                <h3>Creator Tools</h3>
+                <p>ফ্রি বেসলাইন অ্যানালিটিক্স, পোস্ট শিডিউলিং, এবং এনগেজমেন্ট ইনসাইটস।</p>
+            </div>
+            <div class="feature-card glass-card">
+                <div class="feature-icon">🎬</div>
+                <h3>Reels & Stories</h3>
+                <p>ইনস্টাগ্রাম-স্টাইল রিলস এবং ২৪ঘণ্টার স্টোরিজ সিনেমাটিক ফিল্টার সহ।</p>
+            </div>
+            <div class="feature-card glass-card">
+                <div class="feature-icon">💬</div>
+                <h3>Smart Messaging</h3>
+                <p>রিয়েল-টাইম মেসেজিং, গ্রুপ চ্যাট, এবং ভয়েস নোটস সহ সম্পূর্ণ ফিচারড মেসেঞ্জার।</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="auth-container hidden">
+        <div class="auth-box">
+            <h2 class="auth-title">People Link-এ লগইন করুন</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">ইমেইল বা ব্যবহারকারী নাম</label>
+                    <input type="text" id="loginEmail" class="form-control" placeholder="আপনার ইমেইল বা ইউজারনেম">
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">পাসওয়ার্ড</label>
+                    <input type="password" id="loginPassword" class="form-control" placeholder="আপনার পাসওয়ার্ড">
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%;">লগইন করুন</button>
+            </form>
+            <div class="auth-switch">
+                <p>People Link-এ একাউন্ট নেই? <a href="javascript:void(0)" onclick="showSignup()">নিবন্ধন করুন</a></p>
+            </div>
+            <button onclick="hideAuth()" class="btn-secondary" style="width: 100%; margin-top: 1rem;">বাতিল করুন</button>
+        </div>
+    </div>
+
+    <!-- Signup Modal -->
+    <div id="signupModal" class="auth-container hidden">
+        <div class="auth-box">
+            <h2 class="auth-title">People Link-এ নিবন্ধন করুন</h2>
+            <form id="signupForm">
+                <div class="form-group">
+                    <label for="signupName">পুরো নাম</label>
+                    <input type="text" id="signupName" class="form-control" placeholder="আপনার পুরো নাম">
+                </div>
+                <div class="form-group">
+                    <label for="signupEmail">ইমেইল</label>
+                    <input type="email" id="signupEmail" class="form-control" placeholder="আপনার ইমেইল ঠিকানা">
+                </div>
+                <div class="form-group">
+                    <label for="signupPassword">পাসওয়ার্ড</label>
+                    <input type="password" id="signupPassword" class="form-control" placeholder="শক্তিশালী পাসওয়ার্ড">
+                </div>
+                <div class="form-group">
+                    <label for="signupConfirmPassword">পাসওয়ার্ড নিশ্চিত করুন</label>
+                    <input type="password" id="signupConfirmPassword" class="form-control" placeholder="পাসওয়ার্ড আবার লিখুন">
+                </div>
+                <button type="submit" class="btn-primary" style="width: 100%;">People Link একাউন্ট তৈরি করুন</button>
+            </form>
+            <div class="auth-switch">
+                <p>ইতিমধ্যে People Link একাউন্ট আছে? <a href="javascript:void(0)" onclick="showLogin()">লগইন করুন</a></p>
+            </div>
+            <button onclick="hideAuth()" class="btn-secondary" style="width: 100%; margin-top: 1rem;">বাতিল করুন</button>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Authentication Functions
+        function showLogin() {
+            document.getElementById('loginModal').classList.remove('hidden');
+            document.getElementById('signupModal').classList.add('hidden');
+        }
+
+        function showSignup() {
+            document.getElementById('signupModal').classList.remove('hidden');
+            document.getElementById('loginModal').classList.add('hidden');
+        }
+
+        function hideAuth() {
+            document.getElementById('loginModal').classList.add('hidden');
+            document.getElementById('signupModal').classList.add('hidden');
+        }
+
+        // Form Handling
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if(email && password) {
+                alert('People Link-এ লগইন সফল! ড্যাশবোর্ডে রিডাইরেক্ট করা হচ্ছে...');
+                hideAuth();
+            } else {
+                alert('দয়া করে সব ফিল্ড পূরণ করুন।');
+            }
+        });
+
+        document.getElementById('signupForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('signupConfirmPassword').value;
+            
+            if(password !== confirmPassword) {
+                alert('পাসওয়ার্ড মিলছে না!');
+                return;
+            }
+            
+            if(name && email && password) {
+                alert('People Link-এ নিবন্ধন সফল! আপনার ইমেইল ভেরিফিকেশন লিংক পাঠানো হয়েছে।');
+                hideAuth();
+            } else {
+                alert('দয়া করে সব ফিল্ড পূরণ করুন।');
+            }
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add some interactive effects
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add loading animation
+            const cards = document.querySelectorAll('.feature-card');
+            cards.forEach((card, index) => {
+                card.style.animationDelay = `${index * 0.1}s`;
+            });
+        });
+    </script>
+</body>
+</html>
