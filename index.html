@@ -1,0 +1,2053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>People Link - Premium Social Network</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #1877f2;
+            --secondary: #42b72a;
+            --accent: #ff6b6b;
+            --dark: #1c1e21;
+            --darker: #121212;
+            --light: #f0f2f5;
+            --text: #333;
+            --text-light: #65676b;
+            --gold: #ffd700;
+            --silver: #c0c0c0;
+            --bronze: #cd7f32;
+            --success: #00c851;
+            --warning: #ffbb33;
+            --danger: #ff4444;
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f0f2f5;
+            --text-primary: #1c1e21;
+            --text-secondary: #65676b;
+            --border: #dddfe2;
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #18191a;
+            --bg-secondary: #242526;
+            --text-primary: #e4e6eb;
+            --text-secondary: #b0b3b8;
+            --border: #3e4042;
+        }
+
+        body {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+        }
+
+        .card {
+            background: var(--bg-primary);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border);
+        }
+
+        /* Login System */
+        .login-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .auth-card {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .password-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            background: none;
+            border: none;
+            color: var(--text-light);
+            cursor: pointer;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: var(--bg-primary);
+            padding: 12px 5%;
+            display: none;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            border-bottom: 1px solid var(--border);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            background: linear-gradient(45deg, var(--primary), var(--accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover, .nav-links a.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center;
+            background: var(--bg-secondary);
+            border-radius: 20px;
+            padding: 8px 15px;
+            margin: 0 20px;
+        }
+
+        .search-container input {
+            background: none;
+            border: none;
+            outline: none;
+            color: var(--text-primary);
+            width: 200px;
+        }
+
+        /* Language Toggle */
+        .language-toggle {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 16px;
+            padding: 8px 12px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .language-toggle:hover {
+            background: var(--bg-secondary);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .mobile-nav {
+            position: fixed;
+            top: 60px;
+            left: 0;
+            width: 100%;
+            background: var(--bg-primary);
+            z-index: 999;
+            display: none;
+            flex-direction: column;
+            padding: 20px;
+            border-top: 1px solid var(--border);
+        }
+
+        .mobile-nav.active {
+            display: flex;
+        }
+
+        .mobile-nav a {
+            color: var(--text-primary);
+            text-decoration: none;
+            padding: 15px 20px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .mobile-nav a:hover, .mobile-nav a.active {
+            background: var(--primary);
+            color: white;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 80px auto 20px;
+            padding: 20px;
+            display: none;
+            grid-template-columns: 280px 1fr 320px;
+            gap: 20px;
+        }
+
+        /* Stories Section */
+        .stories-container {
+            display: flex;
+            gap: 10px;
+            padding: 15px;
+            overflow-x: auto;
+            margin-bottom: 20px;
+        }
+
+        .story-circle {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+            min-width: 80px;
+        }
+
+        .story-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            padding: 3px;
+            background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+            margin-bottom: 5px;
+        }
+
+        .story-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid var(--bg-primary);
+        }
+
+        /* Create Post */
+        .create-post {
+            padding: 20px;
+        }
+
+        .post-input-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+
+        .post-input {
+            flex: 1;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border);
+            border-radius: 25px;
+            padding: 15px 20px;
+            color: var(--text-primary);
+            font-size: 16px;
+            resize: none;
+            outline: none;
+        }
+
+        .post-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid var(--border);
+        }
+
+        .media-buttons {
+            display: flex;
+            gap: 15px;
+        }
+
+        .media-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 10px 15px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .media-btn:hover {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+
+        .media-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Image Preview */
+        .image-preview {
+            margin-top: 15px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .image-preview img {
+            max-width: 100%;
+            max-height: 300px;
+            border-radius: 10px;
+        }
+
+        .remove-image {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Posts */
+        .post-card {
+            position: relative;
+        }
+
+        .post-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .post-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .post-user-info {
+            flex: 1;
+        }
+
+        .post-username {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .verified-badge {
+            color: var(--primary);
+            font-size: 14px;
+        }
+
+        .post-time {
+            color: var(--text-secondary);
+            font-size: 13px;
+        }
+
+        .post-content {
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .post-image {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            max-height: 500px;
+            object-fit: cover;
+        }
+
+        .post-stats {
+            display: flex;
+            justify-content: space-between;
+            color: var(--text-secondary);
+            font-size: 14px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .post-actions-buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+            padding-top: 10px;
+        }
+
+        .post-action-btn {
+            background: none;
+            border: none;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 8px 5px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 14px;
+        }
+
+        .post-action-btn:hover, .post-action-btn.active {
+            background: var(--bg-secondary);
+            color: var(--primary);
+        }
+
+        /* Post Options */
+        .post-options {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+
+        .post-options-btn {
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .post-options-menu {
+            position: absolute;
+            top: 35px;
+            right: 0;
+            background: var(--bg-primary);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            padding: 10px 0;
+            min-width: 150px;
+            display: none;
+            z-index: 100;
+        }
+
+        .post-options-menu.active {
+            display: block;
+        }
+
+        .post-option {
+            padding: 10px 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .post-option:hover {
+            background: var(--bg-secondary);
+        }
+
+        .post-option.delete {
+            color: var(--danger);
+        }
+
+        /* Comments */
+        .comments-section {
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--border);
+            display: none;
+        }
+
+        .comments-section.active {
+            display: block;
+        }
+
+        .comment {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+            padding: 10px;
+            border-radius: 10px;
+            background: var(--bg-secondary);
+        }
+
+        .comment-input-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .comment-input {
+            flex: 1;
+            padding: 10px 15px;
+            border-radius: 20px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
+            outline: none;
+        }
+
+        /* Right Sidebar */
+        .contacts-container, .suggestions-container {
+            margin-bottom: 20px;
+        }
+
+        .contact-item, .suggestion-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .contact-item:hover, .suggestion-item:hover {
+            background: var(--bg-secondary);
+        }
+
+        .online-indicator {
+            width: 10px;
+            height: 10px;
+            background: var(--success);
+            border-radius: 50%;
+            border: 2px solid var(--bg-primary);
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            background: none;
+            border: none;
+            color: var(--text-primary);
+            cursor: pointer;
+            font-size: 20px;
+            padding: 8px;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background: var(--bg-secondary);
+        }
+
+        /* Profile Edit Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--bg-primary);
+            border-radius: 15px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        /* Notifications */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--primary);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            z-index: 10000;
+            display: none;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+
+        .notification.active {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+
+        /* Password Strength */
+        .password-strength {
+            height: 5px;
+            border-radius: 5px;
+            margin-top: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .strength-weak {
+            background: var(--danger);
+            width: 25%;
+        }
+
+        .strength-medium {
+            background: var(--warning);
+            width: 50%;
+        }
+
+        .strength-strong {
+            background: var(--success);
+            width: 100%;
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .container {
+                grid-template-columns: 250px 1fr;
+            }
+            .right-sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+                padding: 10px;
+                margin-top: 60px;
+            }
+            
+            .nav-links {
+                display: none;
+            }
+            
+            .mobile-menu-btn {
+                display: block;
+            }
+            
+            .search-container {
+                display: none;
+            }
+            
+            .stories-container {
+                padding: 10px;
+            }
+            
+            .post-actions-buttons {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .media-buttons {
+                flex-wrap: wrap;
+                gap: 5px;
+            }
+            
+            .post-actions {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .post-actions .media-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .auth-card {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            .navbar {
+                padding: 10px 15px;
+            }
+            
+            .logo {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <!-- Login System -->
+    <div class="login-container" id="loginContainer">
+        <div class="auth-card" id="authCard">
+            <h2 style="text-align: center; margin-bottom: 10px; color: var(--dark);" id="loginTitle">Welcome to People Link</h2>
+            <p style="text-align: center; color: var(--text-light); margin-bottom: 30px;" id="loginSubtitle">Join the premium social network</p>
+            
+            <div style="margin-bottom: 20px;">
+                <input type="email" id="loginEmail" placeholder="Email address" style="width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; margin-bottom: 10px;">
+                <div class="password-container">
+                    <input type="password" id="loginPassword" placeholder="Password" style="width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px;">
+                    <button class="password-toggle" onclick="togglePasswordVisibility('loginPassword')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <div class="password-strength" id="loginPasswordStrength"></div>
+            </div>
+
+            <button class="media-btn" id="loginBtn" style="width: 100%; background: var(--primary); color: white; border: none; padding: 15px; border-radius: 10px; margin-bottom: 15px;" onclick="login()">
+                <i class="fas fa-sign-in-alt"></i> <span id="loginBtnText">Login</span>
+            </button>
+            
+            <div style="text-align: center; margin: 20px 0;">
+                <span style="color: var(--text-light);">OR</span>
+            </div>
+
+            <button class="media-btn" style="width: 100%; border: 2px solid #db4437; color: #db4437; margin-bottom: 10px;" onclick="loginWithProvider('google')">
+                <i class="fab fa-google"></i> <span id="googleLoginText">Continue with Google</span>
+            </button>
+
+            <button class="media-btn" style="width: 100%; border: 2px solid #1877f2; color: #1877f2;" onclick="loginWithProvider('facebook')">
+                <i class="fab fa-facebook"></i> <span id="facebookLoginText">Continue with Facebook</span>
+            </button>
+
+            <p style="text-align: center; margin-top: 20px; color: var(--text-light);">
+                <span id="noAccountText">Don't have an account?</span> <a href="#" style="color: var(--primary);" onclick="showSignupForm()" id="signupLink">Sign up</a>
+            </p>
+
+            <!-- Quick Test Button -->
+            <button class="media-btn" style="width: 100%; margin-top: 15px; border-color: var(--gold); color: var(--gold);" onclick="quickLogin()">
+                <i class="fas fa-bolt"></i> <span id="quickLoginText">Quick Test Login</span>
+            </button>
+            
+            <!-- Language Toggle in Login -->
+            <div style="text-align: center; margin-top: 20px;">
+                <button class="language-toggle" onclick="toggleLanguage()">
+                    <i class="fas fa-language"></i> <span id="languageToggleText">বাংলা</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Edit Modal -->
+    <div class="modal" id="profileEditModal">
+        <div class="modal-content">
+            <h2 style="margin-bottom: 20px;" id="editProfileTitle">Edit Profile</h2>
+            <div style="margin-bottom: 20px;">
+                <input type="text" id="editName" placeholder="Full Name" style="width: 100%; padding: 15px; border: 2px solid var(--border); border-radius: 10px; margin-bottom: 10px;">
+                <input type="email" id="editEmail" placeholder="Email" style="width: 100%; padding: 15px; border: 2px solid var(--border); border-radius: 10px; margin-bottom: 10px;">
+                <div class="password-container">
+                    <input type="password" id="editPassword" placeholder="New Password (optional)" style="width: 100%; padding: 15px; border: 2px solid var(--border); border-radius: 10px;">
+                    <button class="password-toggle" onclick="togglePasswordVisibility('editPassword')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
+                <div class="password-strength" id="editPasswordStrength"></div>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <button class="media-btn" style="flex: 1; background: var(--primary); color: white;" onclick="saveProfile()" id="saveProfileBtn">Save</button>
+                <button class="media-btn" style="flex: 1; background: var(--danger); color: white;" onclick="closeProfileEdit()" id="cancelProfileBtn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="mainNavbar">
+        <div class="logo">People Link</div>
+        
+        <div class="search-container">
+            <i class="fas fa-search" style="color: var(--text-secondary); margin-right: 8px;"></i>
+            <input type="text" placeholder="Search People Link..." id="searchInput">
+        </div>
+        
+        <div class="nav-links">
+            <a href="#" class="active" onclick="showSection('home')"><i class="fas fa-home"></i> <span id="navHome">Home</span></a>
+            <a href="#" onclick="showSection('friends')"><i class="fas fa-user-friends"></i> <span id="navFriends">Friends</span></a>
+            <a href="#" onclick="showSection('watch')"><i class="fas fa-play-circle"></i> <span id="navWatch">Watch</span></a>
+            <a href="#" onclick="showSection('marketplace')"><i class="fas fa-store"></i> <span id="navMarketplace">Marketplace</span></a>
+            <a href="#" onclick="showSection('groups')"><i class="fas fa-users"></i> <span id="navGroups">Groups</span></a>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <button class="language-toggle" onclick="toggleLanguage()">
+                <i class="fas fa-language"></i> <span id="navLanguage">বাংলা</span>
+            </button>
+            
+            <button class="theme-toggle" onclick="toggleTheme()">
+                <i class="fas fa-moon" id="themeIcon"></i>
+            </button>
+            
+            <div style="position: relative;">
+                <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=40" alt="User" class="post-avatar" id="navUserAvatar">
+                <div class="online-indicator"></div>
+            </div>
+            <span id="navUserName">John</span>
+            <button class="media-btn" onclick="openProfileEdit()"><i class="fas fa-user-edit"></i></button>
+            <button class="media-btn" onclick="logout()"><i class="fas fa-sign-out-alt"></i></button>
+            
+            <!-- Mobile Menu Button -->
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        
+        <!-- Mobile Navigation -->
+        <div class="mobile-nav" id="mobileNav">
+            <a href="#" class="active" onclick="showSection('home')"><i class="fas fa-home"></i> <span id="mobileNavHome">Home</span></a>
+            <a href="#" onclick="showSection('friends')"><i class="fas fa-user-friends"></i> <span id="mobileNavFriends">Friends</span></a>
+            <a href="#" onclick="showSection('watch')"><i class="fas fa-play-circle"></i> <span id="mobileNavWatch">Watch</span></a>
+            <a href="#" onclick="showSection('marketplace')"><i class="fas fa-store"></i> <span id="mobileNavMarketplace">Marketplace</span></a>
+            <a href="#" onclick="showSection('groups')"><i class="fas fa-users"></i> <span id="mobileNavGroups">Groups</span></a>
+        </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container" id="mainContainer">
+        <!-- Left Sidebar -->
+        <div class="left-sidebar">
+            <div class="card">
+                <div class="user-profile" style="text-align: center;">
+                    <div style="position: relative; display: inline-block;">
+                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100" alt="User" class="post-avatar" style="width: 80px; height: 80px;" id="profileAvatar">
+                        <div class="online-indicator" style="width: 15px; height: 15px; bottom: 5px; right: 5px;"></div>
+                    </div>
+                    <h3 style="margin: 10px 0 5px;" id="userName">John Doe <i class="fas fa-check-circle verified-badge"></i></h3>
+                    <p style="color: var(--text-secondary); font-size: 14px;" id="userStatus">🟢 Online</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <h4 style="margin-bottom: 15px;" id="shortcutsTitle">Shortcuts</h4>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                    <button class="media-btn" style="justify-content: flex-start;" onclick="showSection('friends')">
+                        <i class="fas fa-user-friends"></i> <span id="shortcutFriends">Friends</span>
+                    </button>
+                    <button class="media-btn" style="justify-content: flex-start;" onclick="showSection('groups')">
+                        <i class="fas fa-users"></i> <span id="shortcutGroups">Groups</span>
+                    </button>
+                    <button class="media-btn" style="justify-content: flex-start;" onclick="showSection('marketplace')">
+                        <i class="fas fa-store"></i> <span id="shortcutMarketplace">Marketplace</span>
+                    </button>
+                    <button class="media-btn" style="justify-content: flex-start;" onclick="showSection('watch')">
+                        <i class="fas fa-play-circle"></i> <span id="shortcutWatch">Watch</span>
+                    </button>
+                    <button class="media-btn" style="justify-content: flex-start;" onclick="showSection('memories')">
+                        <i class="fas fa-history"></i> <span id="shortcutMemories">Memories</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Feed -->
+        <div class="main-feed">
+            <!-- Stories -->
+            <div class="card">
+                <div class="stories-container">
+                    <div class="story-circle" onclick="createStory()">
+                        <div class="story-avatar">
+                            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100" alt="Your Story">
+                            <div style="position: absolute; bottom: 5px; right: 5px; background: var(--primary); color: white; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                                <i class="fas fa-plus" style="font-size: 10px;"></i>
+                            </div>
+                        </div>
+                        <span style="font-size: 12px;" id="yourStoryText">Your Story</span>
+                    </div>
+                    <!-- Stories will be dynamically added -->
+                </div>
+            </div>
+
+            <!-- Create Post -->
+            <div class="card create-post">
+                <div class="post-input-container">
+                    <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100" alt="User" class="post-avatar" id="createPostAvatar">
+                    <input type="text" class="post-input" placeholder="What's on your mind?" id="postContent">
+                </div>
+                
+                <!-- Image Preview -->
+                <div class="image-preview" id="imagePreview" style="display: none;">
+                    <img id="previewImage" src="" alt="Preview">
+                    <button class="remove-image" onclick="removeImage()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="post-actions">
+                    <div class="media-buttons">
+                        <button class="media-btn" onclick="toggleFileUpload()">
+                            <i class="fas fa-image" style="color: var(--success);"></i> <span id="photoBtnText">Photo</span>
+                        </button>
+                        <button class="media-btn" onclick="addFeeling()">
+                            <i class="fas fa-smile" style="color: var(--warning);"></i> <span id="feelingBtnText">Feeling</span>
+                        </button>
+                        <button class="media-btn" onclick="goLive()">
+                            <i class="fas fa-video" style="color: var(--danger);"></i> <span id="liveBtnText">Live</span>
+                        </button>
+                    </div>
+                    <button class="media-btn" id="postBtn" style="background: var(--primary); color: white;" onclick="createPost()"><span id="postBtnText">Post</span></button>
+                </div>
+                
+                <!-- Hidden file input for real image upload -->
+                <input type="file" id="realImageUpload" accept="image/*" style="display: none;">
+            </div>
+
+            <!-- Posts will be dynamically added here -->
+            <div id="postsContainer"></div>
+        </div>
+
+        <!-- Right Sidebar -->
+        <div class="right-sidebar">
+            <div class="card contacts-container">
+                <h4 style="margin-bottom: 15px;" id="contactsTitle">Contacts</h4>
+                <div class="contact-item">
+                    <div style="position: relative;">
+                        <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=50" alt="User" class="post-avatar">
+                        <div class="online-indicator"></div>
+                    </div>
+                    <span>Sarah Johnson</span>
+                </div>
+                <div class="contact-item">
+                    <div style="position: relative;">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=50" alt="User" class="post-avatar">
+                        <div class="online-indicator"></div>
+                    </div>
+                    <span>Mike Chen</span>
+                </div>
+                <div class="contact-item">
+                    <div style="position: relative;">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=50" alt="User" class="post-avatar">
+                        <div class="online-indicator"></div>
+                    </div>
+                    <span>Alex Thompson</span>
+                </div>
+            </div>
+
+            <div class="card suggestions-container">
+                <h4 style="margin-bottom: 15px;" id="suggestionsTitle">Suggested Friends</h4>
+                <div class="suggestion-item">
+                    <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=50" alt="User" class="post-avatar">
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600;">Emma Wilson</div>
+                        <div style="font-size: 12px; color: var(--text-secondary);">8 mutual friends</div>
+                    </div>
+                    <button class="media-btn" style="background: var(--primary); color: white; padding: 5px 10px; font-size: 12px;" id="addFriendBtn">Add</button>
+                </div>
+                <div class="suggestion-item">
+                    <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=50" alt="User" class="post-avatar">
+                    <div style="flex: 1;">
+                        <div style="font-weight: 600;">David Kim</div>
+                        <div style="font-size: 12px; color: var(--text-secondary);">5 mutual friends</div>
+                    </div>
+                    <button class="media-btn" style="background: var(--primary); color: white; padding: 5px 10px; font-size: 12px;">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification System -->
+    <div class="notification" id="globalNotification"></div>
+
+    <script>
+        // Language settings
+        let currentLanguage = 'en';
+        const translations = {
+            en: {
+                // Login Page
+                loginTitle: "Welcome to People Link",
+                loginSubtitle: "Join the premium social network",
+                loginBtnText: "Login",
+                googleLoginText: "Continue with Google",
+                facebookLoginText: "Continue with Facebook",
+                noAccountText: "Don't have an account?",
+                signupLink: "Sign up",
+                quickLoginText: "Quick Test Login",
+                languageToggleText: "বাংলা",
+                
+                // Navigation
+                navHome: "Home",
+                navFriends: "Friends",
+                navWatch: "Watch",
+                navMarketplace: "Marketplace",
+                navGroups: "Groups",
+                navLanguage: "বাংলা",
+                
+                // Profile
+                editProfileTitle: "Edit Profile",
+                saveProfileBtn: "Save",
+                cancelProfileBtn: "Cancel",
+                
+                // Sidebar
+                shortcutsTitle: "Shortcuts",
+                shortcutFriends: "Friends",
+                shortcutGroups: "Groups",
+                shortcutMarketplace: "Marketplace",
+                shortcutWatch: "Watch",
+                shortcutMemories: "Memories",
+                userStatus: "🟢 Online",
+                
+                // Create Post
+                yourStoryText: "Your Story",
+                photoBtnText: "Photo",
+                feelingBtnText: "Feeling",
+                liveBtnText: "Live",
+                postBtnText: "Post",
+                postPlaceholder: "What's on your mind?",
+                
+                // Right Sidebar
+                contactsTitle: "Contacts",
+                suggestionsTitle: "Suggested Friends",
+                addFriendBtn: "Add"
+            },
+            bn: {
+                // Login Page
+                loginTitle: "পিপল লিঙ্কে স্বাগতম",
+                loginSubtitle: "প্রিমিয়াম সোশ্যাল নেটওয়ার্কে যোগ দিন",
+                loginBtnText: "লগইন",
+                googleLoginText: "গুগল দিয়ে続ける",
+                facebookLoginText: "ফেসবুক দিয়ে続ける",
+                noAccountText: "অ্যাকাউন্ট নেই?",
+                signupLink: "সাইন আপ",
+                quickLoginText: "দ্রুত টেস্ট লগইন",
+                languageToggleText: "English",
+                
+                // Navigation
+                navHome: "হোম",
+                navFriends: "বন্ধু",
+                navWatch: "ভিডিও",
+                navMarketplace: "মার্কেটপ্লেস",
+                navGroups: "গ্রুপ",
+                navLanguage: "English",
+                
+                // Profile
+                editProfileTitle: "প্রোফাইল এডিট",
+                saveProfileBtn: "সেভ",
+                cancelProfileBtn: "বাতিল",
+                
+                // Sidebar
+                shortcutsTitle: "শর্টকাট",
+                shortcutFriends: "বন্ধু",
+                shortcutGroups: "গ্রুপ",
+                shortcutMarketplace: "মার্কেটপ্লেস",
+                shortcutWatch: "ভিডিও",
+                shortcutMemories: "স্মৃতি",
+                userStatus: "🟢 অনলাইন",
+                
+                // Create Post
+                yourStoryText: "আপনার স্টোরি",
+                photoBtnText: "ছবি",
+                feelingBtnText: "অনুভূতি",
+                liveBtnText: "লাইভ",
+                postBtnText: "পোস্ট",
+                postPlaceholder: "কি ভাবছেন?",
+                
+                // Right Sidebar
+                contactsTitle: "কন্টাক্টস",
+                suggestionsTitle: "প্রস্তাবিত বন্ধু",
+                addFriendBtn: "যোগ"
+            }
+        };
+
+        // Enhanced User Database
+        let users = JSON.parse(localStorage.getItem('peopleLinkUsers')) || [
+            {
+                id: 1,
+                email: 'user@example.com',
+                password: 'password123',
+                name: 'John Doe',
+                avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150',
+                verified: true
+            }
+        ];
+
+        // Posts Database
+        let posts = JSON.parse(localStorage.getItem('peopleLinkPosts')) || [
+            {
+                id: 1,
+                userId: 1,
+                userName: 'Sarah Johnson',
+                userAvatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150',
+                content: 'Just launched my new startup! 🚀 So excited to share this journey with all of you. The future of social media is here with People Link!',
+                image: 'https://images.unsplash.com/photo-1556761175-b413da4baf72?w=600',
+                likes: 42,
+                comments: 8,
+                shares: 3,
+                timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+                verified: true,
+                liked: false
+            },
+            {
+                id: 2,
+                userId: 2,
+                userName: 'Mike Chen',
+                userAvatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150',
+                content: 'Beautiful sunset from my balcony today! 🌅 Sometimes we need to pause and appreciate the simple things in life.',
+                image: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600',
+                likes: 28,
+                comments: 5,
+                shares: 1,
+                timestamp: new Date(Date.now() - 5 * 60 * 60 * 1000).toISOString(),
+                verified: true,
+                liked: false
+            }
+        ];
+
+        // Stories Database
+        let stories = JSON.parse(localStorage.getItem('peopleLinkStories')) || [
+            {
+                id: 1,
+                userId: 1,
+                userName: 'John Doe',
+                userAvatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150',
+                image: 'https://images.unsplash.com/photo-1579546929662-711aa81148cf?w=400',
+                timestamp: new Date(Date.now() - 1 * 60 * 60 * 1000).toISOString()
+            },
+            {
+                id: 2,
+                userId: 2,
+                userName: 'Sarah Johnson',
+                userAvatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150',
+                image: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e?w=400',
+                timestamp: new Date(Date.now() - 3 * 60 * 60 * 1000).toISOString()
+            }
+        ];
+
+        // Current User
+        let currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        let nextPostId = Math.max(0, ...posts.map(p => p.id)) + 1;
+        let nextStoryId = Math.max(0, ...stories.map(s => s.id)) + 1;
+        let nextUserId = Math.max(0, ...users.map(u => u.id)) + 1;
+        let selectedImage = null;
+
+        // Initialize the app
+        window.onload = function() {
+            // Load language preference
+            const savedLanguage = localStorage.getItem('language') || 'en';
+            currentLanguage = savedLanguage;
+            applyLanguage();
+            
+            if (currentUser) {
+                showMainApp();
+            }
+            loadStories();
+            loadPosts();
+            setupEventListeners();
+        };
+
+        function setupEventListeners() {
+            // Search functionality
+            document.getElementById('searchInput').addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                if (searchTerm.length > 2) {
+                    performSearch(searchTerm);
+                }
+            });
+
+            // Theme from localStorage
+            const savedTheme = localStorage.getItem('theme') || 'dark';
+            document.body.setAttribute('data-theme', savedTheme);
+            updateThemeIcon(savedTheme);
+            
+            // Mobile menu toggle
+            document.getElementById('mobileMenuBtn').addEventListener('click', function() {
+                document.getElementById('mobileNav').classList.toggle('active');
+            });
+            
+            // Real image upload
+            document.getElementById('realImageUpload').addEventListener('change', handleRealImageUpload);
+            
+            // Password strength indicators
+            document.getElementById('loginPassword').addEventListener('input', function() {
+                checkPasswordStrength('loginPassword', 'loginPasswordStrength');
+            });
+            
+            document.getElementById('editPassword').addEventListener('input', function() {
+                checkPasswordStrength('editPassword', 'editPasswordStrength');
+            });
+        }
+
+        // Language functions
+        function toggleLanguage() {
+            currentLanguage = currentLanguage === 'en' ? 'bn' : 'en';
+            localStorage.setItem('language', currentLanguage);
+            applyLanguage();
+        }
+
+        function applyLanguage() {
+            const elements = document.querySelectorAll('[id]');
+            elements.forEach(element => {
+                const id = element.id;
+                if (translations[currentLanguage][id]) {
+                    if (element.tagName === 'INPUT' && element.type === 'text') {
+                        element.placeholder = translations[currentLanguage][id];
+                    } else {
+                        element.textContent = translations[currentLanguage][id];
+                    }
+                }
+            });
+            
+            // Update mobile navigation
+            const mobileNavIds = ['mobileNavHome', 'mobileNavFriends', 'mobileNavWatch', 'mobileNavMarketplace', 'mobileNavGroups'];
+            mobileNavIds.forEach(id => {
+                const element = document.getElementById(id);
+                if (element && translations[currentLanguage][id.replace('mobileNav', 'nav')]) {
+                    element.textContent = translations[currentLanguage][id.replace('mobileNav', 'nav')];
+                }
+            });
+        }
+
+        // Password strength checker
+        function checkPasswordStrength(passwordFieldId, strengthIndicatorId) {
+            const password = document.getElementById(passwordFieldId).value;
+            const strengthIndicator = document.getElementById(strengthIndicatorId);
+            
+            if (!password) {
+                strengthIndicator.className = 'password-strength';
+                strengthIndicator.style.width = '0';
+                return;
+            }
+            
+            let strength = 0;
+            
+            // Length check
+            if (password.length >= 8) strength += 1;
+            
+            // Contains lowercase
+            if (/[a-z]/.test(password)) strength += 1;
+            
+            // Contains uppercase
+            if (/[A-Z]/.test(password)) strength += 1;
+            
+            // Contains numbers
+            if (/[0-9]/.test(password)) strength += 1;
+            
+            // Contains special characters
+            if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+            
+            // Update strength indicator
+            if (strength <= 2) {
+                strengthIndicator.className = 'password-strength strength-weak';
+            } else if (strength <= 4) {
+                strengthIndicator.className = 'password-strength strength-medium';
+            } else {
+                strengthIndicator.className = 'password-strength strength-strong';
+            }
+        }
+
+        // Real image upload handler
+        function handleRealImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    selectedImage = e.target.result;
+                    
+                    const preview = document.getElementById('imagePreview');
+                    const previewImage = document.getElementById('previewImage');
+                    
+                    previewImage.src = selectedImage;
+                    preview.style.display = 'block';
+                    
+                    showNotification(currentLanguage === 'en' ? 'Image selected!' : 'ছবি নির্বাচন করা হয়েছে!', 'success');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function performSearch(term) {
+            showNotification(currentLanguage === 'en' ? `Searching for: ${term}` : `খুঁজছি: ${term}`, 'info');
+            // In a real app, this would make an API call
+        }
+
+        // Theme functionality
+        function toggleTheme() {
+            const currentTheme = document.body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        }
+
+        function updateThemeIcon(theme) {
+            const icon = document.getElementById('themeIcon');
+            if (theme === 'dark') {
+                icon.className = 'fas fa-sun';
+            } else {
+                icon.className = 'fas fa-moon';
+            }
+        }
+
+        // Password visibility toggle
+        function togglePasswordVisibility(fieldId) {
+            const field = document.getElementById(fieldId);
+            const type = field.type === 'password' ? 'text' : 'password';
+            field.type = type;
+        }
+
+        // Form validation
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        function validatePassword(password) {
+            return password.length >= 6;
+        }
+
+        // Loading states
+        function setLoadingState(button, isLoading) {
+            if (isLoading) {
+                button.disabled = true;
+                const originalText = button.innerHTML;
+                button.setAttribute('data-original-text', originalText);
+                button.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ' + 
+                    (currentLanguage === 'en' ? 'Loading...' : 'লোড হচ্ছে...');
+            } else {
+                button.disabled = false;
+                const originalText = button.getAttribute('data-original-text');
+                if (originalText) {
+                    button.innerHTML = originalText;
+                }
+            }
+        }
+
+        // Authentication functions
+        function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const loginBtn = document.getElementById('loginBtn');
+
+            if (!email || !password) {
+                showNotification(currentLanguage === 'en' ? 'Please fill all fields' : 'সব ফিল্ড পূরণ করুন', 'error');
+                return;
+            }
+
+            if (!validateEmail(email)) {
+                showNotification(currentLanguage === 'en' ? 'Please enter a valid email address' : 'সঠিক ইমেইল ঠিকানা দিন', 'error');
+                return;
+            }
+
+            setLoadingState(loginBtn, true);
+
+            // Simulate API call delay
+            setTimeout(() => {
+                const user = users.find(u => u.email === email && u.password === password);
+                
+                if (user) {
+                    currentUser = user;
+                    localStorage.setItem('currentUser', JSON.stringify(user));
+                    showMainApp();
+                    showNotification((currentLanguage === 'en' ? 'Welcome back, ' : 'ফিরে আসার জন্য স্বাগতম, ') + user.name + '!', 'success');
+                } else {
+                    showNotification(currentLanguage === 'en' ? 'Invalid email or password' : 'ভুল ইমেইল বা পাসওয়ার্ড', 'error');
+                }
+                
+                setLoadingState(loginBtn, false);
+            }, 1500);
+        }
+
+        function loginWithProvider(provider) {
+            showNotification((currentLanguage === 'en' ? 'Connecting with ' : 'এর সাথে সংযোগ হচ্ছে ') + provider + '...', 'info');
+            // In a real app, this would integrate with OAuth
+        }
+
+        function showSignupForm() {
+            const authCard = document.getElementById('authCard');
+            authCard.innerHTML = `
+                <h2 style="text-align: center; margin-bottom: 10px; color: var(--dark);" id="signupTitle">${currentLanguage === 'en' ? 'Create Account' : 'অ্যাকাউন্ট তৈরি করুন'}</h2>
+                <p style="text-align: center; color: var(--text-light); margin-bottom: 30px;" id="signupSubtitle">${currentLanguage === 'en' ? 'Join People Link today' : 'আজই পিপল লিঙ্কে যোগ দিন'}</p>
+                
+                <div style="margin-bottom: 20px;">
+                    <input type="text" id="signupName" placeholder="${currentLanguage === 'en' ? 'Full Name' : 'পুরো নাম'}" style="width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; margin-bottom: 10px;">
+                    <input type="email" id="signupEmail" placeholder="${currentLanguage === 'en' ? 'Email address' : 'ইমেইল ঠিকানা'}" style="width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; margin-bottom: 10px;">
+                    <div class="password-container">
+                        <input type="password" id="signupPassword" placeholder="${currentLanguage === 'en' ? 'Password' : 'পাসওয়ার্ড'}" style="width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px;">
+                        <button class="password-toggle" onclick="togglePasswordVisibility('signupPassword')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="password-strength" id="signupPasswordStrength"></div>
+                    <div class="password-container">
+                        <input type="password" id="signupConfirmPassword" placeholder="${currentLanguage === 'en' ? 'Confirm Password' : 'পাসওয়ার্ড নিশ্চিত করুন'}" style="width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; margin-top: 10px;">
+                        <button class="password-toggle" onclick="togglePasswordVisibility('signupConfirmPassword')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="password-strength" id="signupConfirmPasswordStrength"></div>
+                </div>
+
+                <button class="media-btn" id="signupBtn" style="width: 100%; background: var(--secondary); color: white; border: none; padding: 15px; border-radius: 10px; margin-bottom: 15px;" onclick="signup()">
+                    <i class="fas fa-user-plus"></i> <span id="signupBtnText">${currentLanguage === 'en' ? 'Sign Up' : 'সাইন আপ'}</span>
+                </button>
+                
+                <p style="text-align: center; margin-top: 20px; color: var(--text-light);">
+                    <span id="haveAccountText">${currentLanguage === 'en' ? 'Already have an account?' : 'ইতিমধ্যে অ্যাকাউন্ট আছে?'}</span> <a href="#" style="color: var(--primary);" onclick="showLoginForm()" id="loginLink">${currentLanguage === 'en' ? 'Login' : 'লগইন'}</a>
+                </p>
+                
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="language-toggle" onclick="toggleLanguage()">
+                        <i class="fas fa-language"></i> <span id="languageToggleText">${currentLanguage === 'en' ? 'বাংলা' : 'English'}</span>
+                    </button>
+                </div>
+            `;
+            
+            // Add event listeners for password strength
+            document.getElementById('signupPassword').addEventListener('input', function() {
+                checkPasswordStrength('signupPassword', 'signupPasswordStrength');
+            });
+            
+            document.getElementById('signupConfirmPassword').addEventListener('input', function() {
+                checkPasswordStrength('signupConfirmPassword', 'signupConfirmPasswordStrength');
+            });
+        }
+
+        function showLoginForm() {
+            const authCard = document.getElementById('authCard');
+            authCard.innerHTML = `
+                <h2 style="text-align: center; margin-bottom: 10px; color: var(--dark);" id="loginTitle">${currentLanguage === 'en' ? 'Welcome to People Link' : 'পিপল লিঙ্কে স্বাগতম'}</h2>
+                <p style="text-align: center; color: var(--text-light); margin-bottom: 30px;" id="loginSubtitle">${currentLanguage === 'en' ? 'Join the premium social network' : 'প্রিমিয়াম সোশ্যাল নেটওয়ার্কে যোগ দিন'}</p>
+                
+                <div style="margin-bottom: 20px;">
+                    <input type="email" id="loginEmail" placeholder="${currentLanguage === 'en' ? 'Email address' : 'ইমেইল ঠিকানা'}" style="width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px; margin-bottom: 10px;">
+                    <div class="password-container">
+                        <input type="password" id="loginPassword" placeholder="${currentLanguage === 'en' ? 'Password' : 'পাসওয়ার্ড'}" style="width: 100%; padding: 15px; border: 2px solid #e0e0e0; border-radius: 10px;">
+                        <button class="password-toggle" onclick="togglePasswordVisibility('loginPassword')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                    <div class="password-strength" id="loginPasswordStrength"></div>
+                </div>
+
+                <button class="media-btn" id="loginBtn" style="width: 100%; background: var(--primary); color: white; border: none; padding: 15px; border-radius: 10px; margin-bottom: 15px;" onclick="login()">
+                    <i class="fas fa-sign-in-alt"></i> <span id="loginBtnText">${currentLanguage === 'en' ? 'Login' : 'লগইন'}</span>
+                </button>
+                
+                <div style="text-align: center; margin: 20px 0;">
+                    <span style="color: var(--text-light);">OR</span>
+                </div>
+
+                <button class="media-btn" style="width: 100%; border: 2px solid #db4437; color: #db4437; margin-bottom: 10px;" onclick="loginWithProvider('google')">
+                    <i class="fab fa-google"></i> <span id="googleLoginText">${currentLanguage === 'en' ? 'Continue with Google' : 'গুগল দিয়ে続ける'}</span>
+                </button>
+
+                <button class="media-btn" style="width: 100%; border: 2px solid #1877f2; color: #1877f2;" onclick="loginWithProvider('facebook')">
+                    <i class="fab fa-facebook"></i> <span id="facebookLoginText">${currentLanguage === 'en' ? 'Continue with Facebook' : 'ফেসবুক দিয়ে続ける'}</span>
+                </button>
+
+                <p style="text-align: center; margin-top: 20px; color: var(--text-light);">
+                    <span id="noAccountText">${currentLanguage === 'en' ? 'Don\'t have an account?' : 'অ্যাকাউন্ট নেই?'}</span> <a href="#" style="color: var(--primary);" onclick="showSignupForm()" id="signupLink">${currentLanguage === 'en' ? 'Sign up' : 'সাইন আপ'}</a>
+                </p>
+
+                <!-- Quick Test Button -->
+                <button class="media-btn" style="width: 100%; margin-top: 15px; border-color: var(--gold); color: var(--gold);" onclick="quickLogin()">
+                    <i class="fas fa-bolt"></i> <span id="quickLoginText">${currentLanguage === 'en' ? 'Quick Test Login' : 'দ্রুত টেস্ট লগইন'}</span>
+                </button>
+                
+                <!-- Language Toggle in Login -->
+                <div style="text-align: center; margin-top: 20px;">
+                    <button class="language-toggle" onclick="toggleLanguage()">
+                        <i class="fas fa-language"></i> <span id="languageToggleText">${currentLanguage === 'en' ? 'বাংলা' : 'English'}</span>
+                    </button>
+                </div>
+            `;
+            
+            // Add event listener for password strength
+            document.getElementById('loginPassword').addEventListener('input', function() {
+                checkPasswordStrength('loginPassword', 'loginPasswordStrength');
+            });
+        }
+
+        function signup() {
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            const confirmPassword = document.getElementById('signupConfirmPassword').value;
+            const signupBtn = document.getElementById('signupBtn');
+
+            if (!name || !email || !password || !confirmPassword) {
+                showNotification(currentLanguage === 'en' ? 'Please fill all fields' : 'সব ফিল্ড পূরণ করুন', 'error');
+                return;
+            }
+
+            if (!validateEmail(email)) {
+                showNotification(currentLanguage === 'en' ? 'Please enter a valid email address' : 'সঠিক ইমেইল ঠিকানা দিন', 'error');
+                return;
+            }
+
+            if (!validatePassword(password)) {
+                showNotification(currentLanguage === 'en' ? 'Password must be at least 6 characters' : 'পাসওয়ার্ড অন্তত ৬ অক্ষরের হতে হবে', 'error');
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showNotification(currentLanguage === 'en' ? 'Passwords do not match' : 'পাসওয়ার্ড মিলছে না', 'error');
+                return;
+            }
+
+            // Check if user already exists
+            if (users.find(u => u.email === email)) {
+                showNotification(currentLanguage === 'en' ? 'User with this email already exists' : 'এই ইমেইল দিয়ে ইতিমধ্যে ইউজার আছে', 'error');
+                return;
+            }
+
+            setLoadingState(signupBtn, true);
+
+            // Simulate API call delay
+            setTimeout(() => {
+                const newUser = {
+                    id: nextUserId++,
+                    email: email,
+                    password: password,
+                    name: name,
+                    avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150',
+                    verified: false
+                };
+
+                users.push(newUser);
+                localStorage.setItem('peopleLinkUsers', JSON.stringify(users));
+
+                currentUser = newUser;
+                localStorage.setItem('currentUser', JSON.stringify(newUser));
+                
+                showMainApp();
+                showNotification(currentLanguage === 'en' ? 'Account created successfully! Welcome to People Link!' : 'অ্যাকাউন্ট সফলভাবে তৈরি হয়েছে! পিপল লিঙ্কে স্বাগতম!', 'success');
+                
+                setLoadingState(signupBtn, false);
+            }, 1500);
+        }
+
+        function quickLogin() {
+            document.getElementById('loginEmail').value = 'user@example.com';
+            document.getElementById('loginPassword').value = 'password123';
+            login();
+        }
+
+        function showMainApp() {
+            document.getElementById('loginContainer').style.display = 'none';
+            document.getElementById('mainNavbar').style.display = 'flex';
+            document.getElementById('mainContainer').style.display = 'grid';
+            
+            // Close mobile menu if open
+            document.getElementById('mobileNav').classList.remove('active');
+            
+            if (currentUser) {
+                document.getElementById('userName').textContent = currentUser.name;
+                document.getElementById('navUserName').textContent = currentUser.name.split(' ')[0];
+                document.getElementById('navUserAvatar').src = currentUser.avatar;
+                document.getElementById('createPostAvatar').src = currentUser.avatar;
+                document.getElementById('profileAvatar').src = currentUser.avatar;
+                
+                // Add verified badge if user is verified
+                const verifiedBadge = currentUser.verified ? ' <i class="fas fa-check-circle verified-badge"></i>' : '';
+                document.getElementById('userName').innerHTML = currentUser.name + verifiedBadge;
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            document.getElementById('loginContainer').style.display = 'flex';
+            document.getElementById('mainNavbar').style.display = 'none';
+            document.getElementById('mainContainer').style.display = 'none';
+            showNotification(currentLanguage === 'en' ? 'Logged out successfully' : 'সফলভাবে লগআউট হয়েছে', 'success');
+            showLoginForm();
+        }
+
+        // Profile edit functions
+        function openProfileEdit() {
+            if (!currentUser) return;
+            
+            document.getElementById('editName').value = currentUser.name;
+            document.getElementById('editEmail').value = currentUser.email;
+            document.getElementById('editPassword').value = '';
+            
+            document.getElementById('profileEditModal').classList.add('active');
+        }
+
+        function closeProfileEdit() {
+            document.getElementById('profileEditModal').classList.remove('active');
+        }
+
+        function saveProfile() {
+            const name = document.getElementById('editName').value;
+            const email = document.getElementById('editEmail').value;
+            const password = document.getElementById('editPassword').value;
+
+            if (!name || !email) {
+                showNotification(currentLanguage === 'en' ? 'Please fill all required fields' : 'সব প্রয়োজনীয় ফিল্ড পূরণ করুন', 'error');
+                return;
+            }
+
+            if (!validateEmail(email)) {
+                showNotification(currentLanguage === 'en' ? 'Please enter a valid email address' : 'সঠিক ইমেইল ঠিকানা দিন', 'error');
+                return;
+            }
+
+            // Check if email is already taken by another user
+            const emailExists = users.find(u => u.email === email && u.id !== currentUser.id);
+            if (emailExists) {
+                showNotification(currentLanguage === 'en' ? 'Email is already taken by another user' : 'এই ইমেইল অন্য ইউজার ব্যবহার করছে', 'error');
+                return;
+            }
+
+            // Update user data
+            currentUser.name = name;
+            currentUser.email = email;
+            
+            if (password) {
+                if (!validatePassword(password)) {
+                    showNotification(currentLanguage === 'en' ? 'Password must be at least 6 characters' : 'পাসওয়ার্ড অন্তত ৬ অক্ষরের হতে হবে', 'error');
+                    return;
+                }
+                currentUser.password = password;
+            }
+
+            // Update in users array
+            const userIndex = users.findIndex(u => u.id === currentUser.id);
+            if (userIndex !== -1) {
+                users[userIndex] = currentUser;
+                localStorage.setItem('peopleLinkUsers', JSON.stringify(users));
+                localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            }
+
+            // Update UI
+            document.getElementById('userName').textContent = currentUser.name;
+            document.getElementById('navUserName').textContent = currentUser.name.split(' ')[0];
+            
+            // Add verified badge if user is verified
+            const verifiedBadge = currentUser.verified ? ' <i class="fas fa-check-circle verified-badge"></i>' : '';
+            document.getElementById('userName').innerHTML = currentUser.name + verifiedBadge;
+
+            closeProfileEdit();
+            showNotification(currentLanguage === 'en' ? 'Profile updated successfully!' : 'প্রোফাইল সফলভাবে আপডেট হয়েছে!', 'success');
+        }
+
+        // Stories functionality
+        function loadStories() {
+            const storiesContainer = document.querySelector('.stories-container');
+            
+            stories.forEach(story => {
+                if (!document.getElementById(`story-${story.id}`)) {
+                    const storyElement = document.createElement('div');
+                    storyElement.className = 'story-circle';
+                    storyElement.id = `story-${story.id}`;
+                    storyElement.innerHTML = `
+                        <div class="story-avatar">
+                            <img src="${story.userAvatar}" alt="${story.userName}">
+                        </div>
+                        <span style="font-size: 12px;">${story.userName}</span>
+                    `;
+                    storiesContainer.appendChild(storyElement);
+                }
+            });
+        }
+
+        function createStory() {
+            if (!currentUser) {
+                showNotification(currentLanguage === 'en' ? 'Please login to create stories' : 'স্টোরি তৈরি করতে লগইন করুন', 'error');
+                return;
+            }
+            
+            const newStory = {
+                id: nextStoryId++,
+                userId: currentUser.id,
+                userName: currentUser.name,
+                userAvatar: currentUser.avatar,
+                image: 'https://images.unsplash.com/photo-1579546929662-711aa81148cf?w=400',
+                timestamp: new Date().toISOString()
+            };
+            
+            stories.push(newStory);
+            localStorage.setItem('peopleLinkStories', JSON.stringify(stories));
+            loadStories();
+            showNotification(currentLanguage === 'en' ? 'Story created!' : 'স্টোরি তৈরি হয়েছে!', 'success');
+        }
+
+        // Posts functionality
+        function loadPosts() {
+            const postsContainer = document.getElementById('postsContainer');
+            postsContainer.innerHTML = '';
+
+            posts.forEach(post => {
+                createPostElement(post);
+            });
+        }
+
+        function createPostElement(post) {
+            const postsContainer = document.getElementById('postsContainer');
+            const postElement = document.createElement('div');
+            postElement.className = 'card post-card';
+            postElement.id = `post-${post.id}`;
+
+            const timeAgo = getTimeAgo(post.timestamp);
+            const likeText = post.liked ? (currentLanguage === 'en' ? 'Liked' : 'লাইক করা') : (currentLanguage === 'en' ? 'Like' : 'লাইক');
+            const isOwnPost = currentUser && post.userId === currentUser.id;
+
+            postElement.innerHTML = `
+                <div class="post-header">
+                    <img src="${post.userAvatar}" alt="User" class="post-avatar">
+                    <div class="post-user-info">
+                        <div class="post-username">
+                            ${post.userName} ${post.verified ? '<i class="fas fa-check-circle verified-badge"></i>' : ''}
+                        </div>
+                        <div class="post-time">${timeAgo} · <i class="fas fa-globe-americas"></i></div>
+                    </div>
+                    ${isOwnPost ? `
+                    <div class="post-options">
+                        <button class="post-options-btn" onclick="togglePostOptions(${post.id})">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </button>
+                        <div class="post-options-menu" id="post-options-${post.id}">
+                            <div class="post-option" onclick="editPost(${post.id})">
+                                <i class="fas fa-edit"></i> ${currentLanguage === 'en' ? 'Edit' : 'এডিট'}
+                            </div>
+                            <div class="post-option delete" onclick="deletePost(${post.id})">
+                                <i class="fas fa-trash"></i> ${currentLanguage === 'en' ? 'Delete' : 'মুছুন'}
+                            </div>
+                        </div>
+                    </div>
+                    ` : ''}
+                </div>
+                <div class="post-content">${post.content}</div>
+                ${post.image ? `<img src="${post.image}" alt="Post" class="post-image">` : ''}
+                <div class="post-stats">
+                    <span><i class="fas fa-thumbs-up"></i> ${post.likes}</span>
+                    <span>${post.comments} ${currentLanguage === 'en' ? 'comments' : 'কমেন্ট'} · ${post.shares} ${currentLanguage === 'en' ? 'shares' : 'শেয়ার'}</span>
+                </div>
+                <div class="post-actions-buttons">
+                    <button class="post-action-btn ${post.liked ? 'active' : ''}" onclick="toggleLike(${post.id})">
+                        <i class="fas fa-thumbs-up"></i> ${likeText}
+                    </button>
+                    <button class="post-action-btn" onclick="toggleComments(${post.id})">
+                        <i class="fas fa-comment"></i> ${currentLanguage === 'en' ? 'Comment' : 'কমেন্ট'}
+                    </button>
+                    <button class="post-action-btn" onclick="sharePost(${post.id})">
+                        <i class="fas fa-share"></i> ${currentLanguage === 'en' ? 'Share' : 'শেয়ার'}
+                    </button>
+                    <button class="post-action-btn" onclick="savePost(${post.id})">
+                        <i class="fas fa-bookmark"></i> ${currentLanguage === 'en' ? 'Save' : 'সেভ'}
+                    </button>
+                </div>
+                <div class="comments-section" id="comments-${post.id}">
+                    <div class="comment">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40" alt="User" class="post-avatar">
+                        <div>
+                            <div style="font-weight: 600;">Mike Chen</div>
+                            <div>${currentLanguage === 'en' ? 'Amazing post! 👏' : 'দারুণ পোস্ট! 👏'}</div>
+                        </div>
+                    </div>
+                    <div class="comment-input-container">
+                        <img src="${currentUser ? currentUser.avatar : 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=40'}" alt="User" class="post-avatar">
+                        <input type="text" class="comment-input" placeholder="${currentLanguage === 'en' ? 'Write a comment...' : 'কমেন্ট লিখুন...'}" onkeypress="addComment(event, ${post.id})">
+                    </div>
+                </div>
+            `;
+
+            postsContainer.appendChild(postElement);
+        }
+
+        function getTimeAgo(timestamp) {
+            const now = new Date();
+            const postTime = new Date(timestamp);
+            const diff = now - postTime;
+            
+            const minutes = Math.floor(diff / 60000);
+            const hours = Math.floor(diff / 3600000);
+            const days = Math.floor(diff / 86400000);
+            
+            if (minutes < 1) return currentLanguage === 'en' ? 'Just now' : 'এইমাত্র';
+            if (minutes < 60) return `${minutes}${currentLanguage === 'en' ? 'm ago' : 'মি. আগে'}`;
+            if (hours < 24) return `${hours}${currentLanguage === 'en' ? 'h ago' : 'ঘ. আগে'}`;
+            return `${days}${currentLanguage === 'en' ? 'd ago' : 'দিন আগে'}`;
+        }
+
+        function togglePostOptions(postId) {
+            const optionsMenu = document.getElementById(`post-options-${postId}`);
+            optionsMenu.classList.toggle('active');
+            
+            // Close other open menus
+            document.querySelectorAll('.post-options-menu').forEach(menu => {
+                if (menu.id !== `post-options-${postId}`) {
+                    menu.classList.remove('active');
+                }
+            });
+        }
+
+        function editPost(postId) {
+            const post = posts.find(p => p.id === postId);
+            if (!post) return;
+            
+            const newContent = prompt(currentLanguage === 'en' ? 'Edit your post:' : 'আপনার পোস্ট এডিট করুন:', post.content);
+            if (newContent !== null && newContent.trim() !== '') {
+                post.content = newContent.trim();
+                localStorage.setItem('peopleLinkPosts', JSON.stringify(posts));
+                loadPosts();
+                showNotification(currentLanguage === 'en' ? 'Post updated successfully!' : 'পোস্ট সফলভাবে আপডেট হয়েছে!', 'success');
+            }
+        }
+
+        function deletePost(postId) {
+            if (confirm(currentLanguage === 'en' ? 'Are you sure you want to delete this post?' : 'আপনি কি নিশ্চিত এই পোস্টটি মুছতে চান?')) {
+                posts = posts.filter(p => p.id !== postId);
+                localStorage.setItem('peopleLinkPosts', JSON.stringify(posts));
+                loadPosts();
+                showNotification(currentLanguage === 'en' ? 'Post deleted successfully!' : 'পোস্ট সফলভাবে মুছে ফেলা হয়েছে!', 'success');
+            }
+        }
+
+        // Image upload functionality
+        function toggleFileUpload() {
+            if (!currentUser) {
+                showNotification(currentLanguage === 'en' ? 'Please login to upload images' : 'ছবি আপলোড করতে লগইন করুন', 'error');
+                return;
+            }
+            
+            document.getElementById('realImageUpload').click();
+        }
+
+        function removeImage() {
+            selectedImage = null;
+            document.getElementById('imagePreview').style.display = 'none';
+        }
+
+        function createPost() {
+            if (!currentUser) {
+                showNotification(currentLanguage === 'en' ? 'Please login to create posts' : 'পোস্ট তৈরি করতে লগইন করুন', 'error');
+                return;
+            }
+
+            const content = document.getElementById('postContent').value.trim();
+            if (!content && !selectedImage) {
+                showNotification(currentLanguage === 'en' ? 'Please write something or add an image to post' : 'পোস্ট করতে কিছু লিখুন বা ছবি যোগ করুন', 'error');
+                return;
+            }
+
+            const postBtn = document.getElementById('postBtn');
+            setLoadingState(postBtn, true);
+
+            // Simulate API call delay
+            setTimeout(() => {
+                const newPost = {
+                    id: nextPostId++,
+                    userId: currentUser.id,
+                    userName: currentUser.name,
+                    userAvatar: currentUser.avatar,
+                    content: content,
+                    image: selectedImage,
+                    likes: 0,
+                    comments: 0,
+                    shares: 0,
+                    timestamp: new Date().toISOString(),
+                    verified: currentUser.verified || false,
+                    liked: false
+                };
+
+                posts.unshift(newPost);
+                localStorage.setItem('peopleLinkPosts', JSON.stringify(posts));
+
+                createPostElement(newPost);
+                document.getElementById('postContent').value = '';
+                removeImage();
+                selectedImage = null;
+                
+                showNotification(currentLanguage === 'en' ? 'Post created successfully!' : 'পোস্ট সফলভাবে তৈরি হয়েছে!', 'success');
+                setLoadingState(postBtn, false);
+            }, 1000);
+        }
+
+        function toggleLike(postId) {
+            if (!currentUser) {
+                showNotification(currentLanguage === 'en' ? 'Please login to like posts' : 'পোস্ট লাইক করতে লগইন করুন', 'error');
+                return;
+            }
+
+            const post = posts.find(p => p.id === postId);
+            if (!post) return;
+
+            post.liked = !post.liked;
+            post.likes += post.liked ? 1 : -1;
+            
+            localStorage.setItem('peopleLinkPosts', JSON.stringify(posts));
+            loadPosts(); // Refresh posts to update UI
+            
+            if (post.liked) {
+                showNotification(currentLanguage === 'en' ? 'You liked this post' : 'আপনি এই পোস্টটি লাইক করেছেন', 'success');
+            }
+        }
+
+        function toggleComments(postId) {
+            const commentsSection = document.getElementById(`comments-${postId}`);
+            commentsSection.classList.toggle('active');
+        }
+
+        function addComment(event, postId) {
+            if (event.key === 'Enter' && event.target.value.trim()) {
+                if (!currentUser) {
+                    showNotification(currentLanguage === 'en' ? 'Please login to comment' : 'কমেন্ট করতে লগইন করুন', 'error');
+                    return;
+                }
+                
+                const post = posts.find(p => p.id === postId);
+                if (post) {
+                    post.comments++;
+                    localStorage.setItem('peopleLinkPosts', JSON.stringify(posts));
+                    loadPosts(); // Refresh to update comment count
+                }
+                
+                showNotification(currentLanguage === 'en' ? 'Comment added!' : 'কমেন্ট যোগ হয়েছে!', 'success');
+                event.target.value = '';
+            }
+        }
+
+        function sharePost(postId) {
+            if (!currentUser) {
+                showNotification(currentLanguage === 'en' ? 'Please login to share posts' : 'পোস্ট শেয়ার করতে লগইন করুন', 'error');
+                return;
+            }
+            
+            const post = posts.find(p => p.id === postId);
+            if (post) {
+                post.shares++;
+                localStorage.setItem('peopleLinkPosts', JSON.stringify(posts));
+                loadPosts(); // Refresh to update share count
+            }
+            
+            showNotification(currentLanguage === 'en' ? 'Post shared!' : 'পোস্ট শেয়ার হয়েছে!', 'success');
+        }
+
+        function savePost(postId) {
+            if (!currentUser) {
+                showNotification(currentLanguage === 'en' ? 'Please login to save posts' : 'পোস্ট সেভ করতে লগইন করুন', 'error');
+                return;
+            }
+            showNotification(currentLanguage === 'en' ? 'Post saved to your collection!' : 'পোস্ট আপনার কালেকশনে সেভ হয়েছে!', 'success');
+        }
+
+        // Other UI functions
+        function showSection(section) {
+            showNotification(currentLanguage === 'en' ? `Showing ${section} section` : `${section} সেকশন দেখানো হচ্ছে`, 'info');
+        }
+
+        function addFeeling() {
+            if (!currentUser) {
+                showNotification(currentLanguage === 'en' ? 'Please login to add feelings' : 'অনুভূতি যোগ করতে লগইন করুন', 'error');
+                return;
+            }
+            showNotification(currentLanguage === 'en' ? 'Feeling selector would open here' : 'এখানে অনুভূতি সিলেক্টর খুলবে', 'info');
+        }
+
+        function goLive() {
+            if (!currentUser) {
+                showNotification(currentLanguage === 'en' ? 'Please login to go live' : 'লাইভ হতে লগইন করুন', 'error');
+                return;
+            }
+            showNotification(currentLanguage === 'en' ? 'Live streaming started!' : 'লাইভ স্ট্রিমিং শুরু হয়েছে!', 'success');
+        }
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.getElementById('globalNotification');
+            notification.textContent = message;
+            notification.className = 'notification active';
+            
+            if (type === 'error') {
+                notification.style.background = 'var(--danger)';
+            } else if (type === 'success') {
+                notification.style.background = 'var(--success)';
+            } else {
+                notification.style.background = 'var(--primary)';
+            }
+            
+            setTimeout(() => {
+                notification.classList.remove('active');
+            }, 3000);
+        }
+
+        // Close post options when clicking outside
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.post-options')) {
+                document.querySelectorAll('.post-options-menu').forEach(menu => {
+                    menu.classList.remove('active');
+                });
+            }
+            
+            // Close mobile menu when clicking outside
+            if (!e.target.closest('.mobile-menu-btn') && !e.target.closest('.mobile-nav')) {
+                document.getElementById('mobileNav').classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
