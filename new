@@ -1,0 +1,1050 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>People Link-Social - Dashboard</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-gold: #D4AF37;
+            --secondary-gold: #F5E6B3;
+            --dark-bg: #0f0f0f;
+            --darker-bg: #0a0a0a;
+            --light-bg: #1a1a1a;
+            --lighter-bg: #2d2d2d;
+            --text-light: #ffffff;
+            --text-gray: #b0b0b0;
+            --gradient: linear-gradient(135deg, #D4AF37, #F5E6B3);
+            --gradient-text: linear-gradient(135deg, #D4AF37, #F5E6B3, #FFD700);
+            --success: #10B981;
+            --danger: #EF4444;
+            --warning: #F59E0B;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Header Styles */
+        .header {
+            background: var(--light-bg);
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.1);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            background: var(--gradient-text);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo i {
+            font-size: 2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-light);
+            text-decoration: none;
+            transition: color 0.3s ease;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-gold);
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            cursor: pointer;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: background 0.3s ease;
+        }
+
+        .user-profile:hover {
+            background: rgba(212, 175, 55, 0.1);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient);
+            padding: 2px;
+        }
+
+        .user-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .user-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .user-status {
+            font-size: 0.8rem;
+            color: var(--text-gray);
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 25px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient);
+            color: var(--dark-bg);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--primary-gold);
+            border: 2px solid var(--primary-gold);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-gold);
+            color: var(--dark-bg);
+        }
+
+        /* Dashboard Layout */
+        .dashboard {
+            display: flex;
+            min-height: calc(100vh - 80px);
+            margin-top: 80px;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background: var(--darker-bg);
+            padding: 2rem 1rem;
+            position: fixed;
+            height: calc(100vh - 80px);
+            overflow-y: auto;
+            border-right: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            margin-top: 2rem;
+        }
+
+        .sidebar-item {
+            margin-bottom: 0.5rem;
+        }
+
+        .sidebar-link {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            color: var(--text-light);
+            text-decoration: none;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .sidebar-link:hover, .sidebar-link.active {
+            background: rgba(212, 175, 55, 0.1);
+            color: var(--primary-gold);
+        }
+
+        .sidebar-link i {
+            font-size: 1.2rem;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 2rem;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            background: var(--gradient-text);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Dashboard Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--light-bg);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-gold);
+            box-shadow: 0 10px 25px rgba(212, 175, 55, 0.1);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .stat-icon {
+            font-size: 2rem;
+            background: var(--gradient-text);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .stat-title {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-change {
+            font-size: 0.8rem;
+            color: var(--success);
+        }
+
+        .stat-change.negative {
+            color: var(--danger);
+        }
+
+        /* Activity Feed */
+        .activity-feed {
+            background: var(--light-bg);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .feed-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .feed-title {
+            font-size: 1.5rem;
+            color: var(--text-light);
+        }
+
+        .feed-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .feed-item:last-child {
+            border-bottom: none;
+        }
+
+        .feed-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--gradient);
+            padding: 2px;
+        }
+
+        .feed-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .feed-content {
+            flex: 1;
+        }
+
+        .feed-text {
+            color: var(--text-light);
+            margin-bottom: 0.2rem;
+        }
+
+        .feed-time {
+            font-size: 0.8rem;
+            color: var(--text-gray);
+        }
+
+        /* Posts Section */
+        .posts-section {
+            margin-top: 2rem;
+        }
+
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+        }
+
+        .post-card {
+            background: var(--light-bg);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .post-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary-gold);
+            box-shadow: 0 15px 30px rgba(212, 175, 55, 0.1);
+        }
+
+        .post-header {
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .post-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--gradient);
+            padding: 2px;
+        }
+
+        .post-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .post-user-info h4 {
+            color: var(--text-light);
+            margin-bottom: 0.2rem;
+        }
+
+        .post-user-info span {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        .post-content {
+            padding: 1.5rem;
+        }
+
+        .post-text {
+            color: var(--text-light);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .post-image {
+            width: 100%;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+        }
+
+        .post-actions {
+            display: flex;
+            justify-content: space-around;
+            padding: 1rem 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .post-action {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-gray);
+            cursor: pointer;
+            transition: color 0.3s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+        }
+
+        .post-action:hover {
+            color: var(--primary-gold);
+            background: rgba(212, 175, 55, 0.1);
+        }
+
+        /* Create Post */
+        .create-post {
+            background: var(--light-bg);
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 1px solid rgba(212, 175, 55, 0.1);
+        }
+
+        .create-post-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .create-post-text {
+            width: 100%;
+            background: var(--darker-bg);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 1rem;
+            color: var(--text-light);
+            font-size: 1rem;
+            resize: none;
+            min-height: 100px;
+        }
+
+        .create-post-text:focus {
+            outline: none;
+            border-color: var(--primary-gold);
+        }
+
+        .create-post-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 1rem;
+        }
+
+        .post-options {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .post-option {
+            color: var(--text-gray);
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .post-option:hover {
+            color: var(--primary-gold);
+        }
+
+        /* Mobile Bottom Nav */
+        .mobile-bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--light-bg);
+            padding: 0.8rem;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid rgba(212, 175, 55, 0.2);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-gray);
+            text-decoration: none;
+            font-size: 0.8rem;
+            gap: 0.3rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-item.active {
+            color: var(--primary-gold);
+        }
+
+        .nav-item i {
+            font-size: 1.2rem;
+        }
+
+        .create-post-btn {
+            background: var(--gradient);
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: -20px;
+            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+            color: var(--dark-bg);
+            text-decoration: none;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 200px;
+            }
+            
+            .main-content {
+                margin-left: 200px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 1rem;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .logo {
+                font-size: 1.5rem;
+            }
+
+            .sidebar {
+                width: 70px;
+                padding: 1rem 0.5rem;
+            }
+
+            .sidebar-link span {
+                display: none;
+            }
+
+            .main-content {
+                margin-left: 70px;
+                padding: 1rem;
+            }
+
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .posts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .mobile-bottom-nav {
+                display: flex;
+            }
+
+            .user-info {
+                display: none;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar {
+                display: none;
+            }
+            
+            .main-content {
+                margin-left: 0;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .delay-100 {
+            animation-delay: 0.1s;
+        }
+
+        .delay-200 {
+            animation-delay: 0.2s;
+        }
+
+        .delay-300 {
+            animation-delay: 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav-container">
+            <a href="#" class="logo">
+                <i class="fas fa-crown"></i>
+                People Link
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="#home"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="#feed"><i class="fas fa-newspaper"></i> Feed</a></li>
+                <li><a href="#messages"><i class="fas fa-comments"></i> Messages</a></li>
+                <li><a href="#notifications"><i class="fas fa-bell"></i> Notifications</a></li>
+                <li><a href="#discover"><i class="fas fa-compass"></i> Discover</a></li>
+            </ul>
+
+            <div class="nav-right">
+                <div class="user-profile">
+                    <div class="user-avatar">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face" alt="User Avatar">
+                    </div>
+                    <div class="user-info">
+                        <span class="user-name">John Doe</span>
+                        <span class="user-status">Online</span>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Dashboard -->
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <ul class="sidebar-menu">
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link active">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-user"></i>
+                        <span>Profile</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-users"></i>
+                        <span>Connections</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-comments"></i>
+                        <span>Messages</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-bell"></i>
+                        <span>Notifications</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">
+                        <i class="fas fa-question-circle"></i>
+                        <span>Help & Support</span>
+                    </a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link" id="logoutBtn">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="page-header">
+                <h1 class="page-title">Dashboard</h1>
+                <button class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Create Post
+                </button>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card animate-fade-in-up">
+                    <div class="stat-header">
+                        <h3 class="stat-title">Connections</h3>
+                        <i class="fas fa-users stat-icon"></i>
+                    </div>
+                    <div class="stat-value">1,247</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i> 12% this month
+                    </div>
+                </div>
+
+                <div class="stat-card animate-fade-in-up delay-100">
+                    <div class="stat-header">
+                        <h3 class="stat-title">Posts</h3>
+                        <i class="fas fa-newspaper stat-icon"></i>
+                    </div>
+                    <div class="stat-value">84</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i> 5% this month
+                    </div>
+                </div>
+
+                <div class="stat-card animate-fade-in-up delay-200">
+                    <div class="stat-header">
+                        <h3 class="stat-title">Engagement</h3>
+                        <i class="fas fa-heart stat-icon"></i>
+                    </div>
+                    <div class="stat-value">3.2K</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i> 8% this month
+                    </div>
+                </div>
+
+                <div class="stat-card animate-fade-in-up delay-300">
+                    <div class="stat-header">
+                        <h3 class="stat-title">Profile Views</h3>
+                        <i class="fas fa-eye stat-icon"></i>
+                    </div>
+                    <div class="stat-value">5.7K</div>
+                    <div class="stat-change positive">
+                        <i class="fas fa-arrow-up"></i> 15% this month
+                    </div>
+                </div>
+            </div>
+
+            <!-- Create Post -->
+            <div class="create-post">
+                <div class="create-post-header">
+                    <div class="user-avatar">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face" alt="User Avatar">
+                    </div>
+                    <div style="flex: 1;">
+                        <h4>John Doe</h4>
+                        <span style="color: var(--text-gray); font-size: 0.9rem;">What's on your mind?</span>
+                    </div>
+                </div>
+                <textarea class="create-post-text" placeholder="Share something with your network..."></textarea>
+                <div class="create-post-actions">
+                    <div class="post-options">
+                        <div class="post-option">
+                            <i class="fas fa-image"></i> Photo
+                        </div>
+                        <div class="post-option">
+                            <i class="fas fa-video"></i> Video
+                        </div>
+                        <div class="post-option">
+                            <i class="fas fa-map-marker-alt"></i> Location
+                        </div>
+                    </div>
+                    <button class="btn btn-primary">Post</button>
+                </div>
+            </div>
+
+            <!-- Activity Feed -->
+            <div class="activity-feed">
+                <div class="feed-header">
+                    <h3 class="feed-title">Recent Activity</h3>
+                    <a href="#" style="color: var(--primary-gold); text-decoration: none;">See All</a>
+                </div>
+                
+                <div class="feed-item">
+                    <div class="feed-avatar">
+                        <img src="https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face" alt="User Avatar">
+                    </div>
+                    <div class="feed-content">
+                        <p class="feed-text"><strong>Sarah Johnson</strong> liked your post</p>
+                        <span class="feed-time">10 minutes ago</span>
+                    </div>
+                </div>
+                
+                <div class="feed-item">
+                    <div class="feed-avatar">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face" alt="User Avatar">
+                    </div>
+                    <div class="feed-content">
+                        <p class="feed-text"><strong>Mike Chen</strong> commented on your photo</p>
+                        <span class="feed-time">45 minutes ago</span>
+                    </div>
+                </div>
+                
+                <div class="feed-item">
+                    <div class="feed-avatar">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face" alt="User Avatar">
+                    </div>
+                    <div class="feed-content">
+                        <p class="feed-text"><strong>Emma Wilson</strong> shared your post</p>
+                        <span class="feed-time">2 hours ago</span>
+                    </div>
+                </div>
+                
+                <div class="feed-item">
+                    <div class="feed-avatar">
+                        <img src="https://images.unsplash.com/photo-1544725176-7c40e5a71c5e?w=150&h=150&fit=crop&crop=face" alt="User Avatar">
+                    </div>
+                    <div class="feed-content">
+                        <p class="feed-text"><strong>Lisa Kim</strong> started following you</p>
+                        <span class="feed-time">5 hours ago</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Posts Section -->
+            <div class="posts-section">
+                <h2 style="margin-bottom: 1.5rem; color: var(--text-light);">Your Feed</h2>
+                
+                <div class="posts-grid">
+                    <!-- Posts will be populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Bottom Navigation -->
+    <div class="mobile-bottom-nav">
+        <a href="#" class="nav-item active">
+            <i class="fas fa-home"></i>
+            <span>Home</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="fas fa-search"></i>
+            <span>Search</span>
+        </a>
+        <a href="#" class="create-post-btn">
+            <i class="fas fa-plus"></i>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="fas fa-bell"></i>
+            <span>Alerts</span>
+        </a>
+        <a href="#" class="nav-item">
+            <i class="fas fa-user"></i>
+            <span>Profile</span>
+        </a>
+    </div>
+
+    <script>
+        // Sample data for posts
+        const samplePosts = [
+            {
+                id: 1,
+                user: { name: "Sarah Johnson", username: "sarah_j", avatar: "https://images.unsplash.com/photo-1494790108755-2616b612b786?w=150&h=150&fit=crop&crop=face" },
+                content: "Just launched my new startup! So excited to share this journey with you all. 🚀 #entrepreneurship #startup",
+                image: "https://images.unsplash.com/photo-1556761175-b413da4baf72?w=500&h=400&fit=crop",
+                likes: 124,
+                comments: 23,
+                shares: 8,
+                time: "2 hours ago"
+            },
+            {
+                id: 2,
+                user: { name: "Mike Chen", username: "mike_chen", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face" },
+                content: "Beautiful sunset from the Maldives. Sometimes you need to disconnect to reconnect. 🌅 #travel #sunset #mindfulness",
+                image: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=500&h=400&fit=crop",
+                likes: 89,
+                comments: 12,
+                shares: 3,
+                time: "4 hours ago"
+            },
+            {
+                id: 3,
+                user: { name: "Emma Wilson", username: "emma_w", avatar: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face" },
+                content: "Just completed my first marathon! The journey was tough but absolutely worth it. 🏃‍♀️💪 #fitness #marathon #achievement",
+                image: "https://images.unsplash.com/photo-1552674605-db6ffd4facb5?w=500&h=400&fit=crop",
+                likes: 215,
+                comments: 45,
+                shares: 12,
+                time: "6 hours ago"
+            }
+        ];
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            loadPosts();
+            setupEventListeners();
+        });
+
+        // Load posts
+        function loadPosts() {
+            const postsGrid = document.querySelector('.posts-grid');
+            postsGrid.innerHTML = '';
+
+            samplePosts.forEach(post => {
+                const postElement = document.createElement('div');
+                postElement.className = 'post-card';
+                postElement.innerHTML = `
+                    <div class="post-header">
+                        <div class="post-avatar">
+                            <img src="${post.user.avatar}" alt="${post.user.name}">
+                        </div>
+                        <div class="post-user-info">
+                            <h4>${post.user.name}</h4>
+                            <span>${post.time}</span>
+                        </div>
+                    </div>
+                    <div class="post-content">
+                        <p class="post-text">${post.content}</p>
+                        <img src="${post.image}" alt="Post image" class="post-image">
+                    </div>
+                    <div class="post-actions">
+                        <div class="post-action">
+                            <i class="fas fa-heart"></i>
+                            <span>${post.likes}</span>
+                        </div>
+                        <div class="post-action">
+                            <i class="fas fa-comment"></i>
+                            <span>${post.comments}</span>
+                        </div>
+                        <div class="post-action">
+                            <i class="fas fa-share"></i>
+                            <span>${post.shares}</span>
+                        </div>
+                    </div>
+                `;
+                postsGrid.appendChild(postElement);
+            });
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Sidebar menu active state
+            const sidebarLinks = document.querySelectorAll('.sidebar-link');
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    sidebarLinks.forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // Mobile nav active state
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    navItems.forEach(i => i.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+
+            // Logout button
+            document.getElementById('logoutBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                if (confirm('Are you sure you want to logout?')) {
+                    // In a real app, this would redirect to logout endpoint
+                    alert('Logging out...');
+                    // Redirect to login page
+                    window.location.href = 'deepseek_html_20251002_53b5f9.html';
+                }
+            });
+
+            // Create post button
+            document.querySelector('.create-post .btn').addEventListener('click', function() {
+                const postText = document.querySelector('.create-post-text').value;
+                if (postText.trim() === '') {
+                    alert('Please write something to post!');
+                    return;
+                }
+                
+                // In a real app, this would send the post to the server
+                alert('Post created successfully!');
+                document.querySelector('.create-post-text').value = '';
+                
+                // Reload posts to show the new one
+                loadPosts();
+            });
+        }
+    </script>
+</body>
+</html>
