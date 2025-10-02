@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>People Link - Premium Verification</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .verification-container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .logo {
+            font-size: 32px;
+            font-weight: bold;
+            background: linear-gradient(45deg, #1877f2, #42b72a);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #65676b;
+            margin-bottom: 30px;
+        }
+
+        .tab-container {
+            display: flex;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #f0f2f5;
+        }
+
+        .tab {
+            flex: 1;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .tab.active {
+            background: #1877f2;
+            color: white;
+        }
+
+        .verification-form {
+            display: none;
+        }
+
+        .verification-form.active {
+            display: block;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #1c1e21;
+        }
+
+        input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #1877f2;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+
+        .btn-primary {
+            background: #1877f2;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #166fe5;
+        }
+
+        .btn-success {
+            background: #42b72a;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #36a420;
+        }
+
+        .price-tag {
+            background: #ff6b6b;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        .master-code-note {
+            background: #e7f3ff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: left;
+            border-left: 4px solid #1877f2;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .verification-success {
+            text-align: center;
+            padding: 30px;
+        }
+
+        .success-icon {
+            font-size: 64px;
+            color: #42b72a;
+            margin-bottom: 20px;
+        }
+
+        .payment-methods {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .payment-method {
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            padding: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .payment-method.selected {
+            border-color: #1877f2;
+            background: #e7f3ff;
+        }
+
+        .payment-method i {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .payment-icon {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto 10px;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="verification-container">
+        <div class="logo">People Link</div>
+        <div class="subtitle">Premium Account Verification</div>
+
+        <div class="tab-container">
+            <div class="tab active" onclick="showTab('code')">Master Code</div>
+            <div class="tab" onclick="showTab('payment')">Paid Verification</div>
+        </div>
+
+        <!-- Master Code Verification -->
+        <div class="verification-form active" id="codeForm">
+            <div class="master-code-note">
+                <strong>Master Code Holder:</strong> আপনি যদি মাস্টার কোডটি পান, তাহলে ফ্রিতে verify করতে পারবেন।
+            </div>
+
+            <div class="input-group">
+                <label for="masterCode">Enter Master Code</label>
+                <input type="text" id="masterCode" placeholder="198920082015" maxlength="12">
+            </div>
+
+            <button class="btn btn-primary" onclick="verifyWithCode()">
+                <i class="fas fa-check-circle"></i> Verify Free
+            </button>
+
+            <p style="margin-top: 15px; color: #65676b; font-size: 14px;">
+                মাস্টার কোড না থাকলে উপরের Paid Verification ট্যাবে ক্লিক করুন
+            </p>
+        </div>
+
+        <!-- Paid Verification -->
+        <div class="verification-form" id="paymentForm">
+            <div class="price-tag">
+                <i class="fas fa-tag"></i> Verification Fee: $10
+            </div>
+
+            <div class="payment-methods">
+                <div class="payment-method" onclick="selectPayment('paypal')">
+                    <i class="fab fa-paypal" style="color: #003087;"></i>
+                    <div>PayPal</div>
+                </div>
+                <div class="payment-method" onclick="selectPayment('stripe')">
+                    <i class="fab fa-cc-stripe" style="color: #6772e5;"></i>
+                    <div>Stripe</div>
+                </div>
+                <div class="payment-method" onclick="selectPayment('bkash')">
+                    <div class="payment-icon" style="background: #e2136e; color: white; border-radius: 5px; display: flex; align-items: center; justify-content: center; font-weight: bold;">
+                        bKash
+                    </div>
+                    <div>bKash</div>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" placeholder="your@email.com">
+            </div>
+
+            <button class="btn btn-success" onclick="processPayment()">
+                <i class="fas fa-lock"></i> Pay $10 & Verify
+            </button>
+
+            <p style="margin-top: 15px; color: #65676b; font-size: 14px;">
+                Secure payment processed by our partners
+            </p>
+        </div>
+
+        <!-- Success Message -->
+        <div class="verification-success hidden" id="successMessage">
+            <div class="success-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>Verification Successful!</h2>
+            <p>Your account has been verified successfully.</p>
+            <button class="btn btn-primary" onclick="goToDashboard()">
+                Go to Dashboard
+            </button>
+        </div>
+    </div>
+
+    <script>
+        let selectedPaymentMethod = '';
+
+        function showTab(tabName) {
+            // Update tabs
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            // Show selected form
+            document.getElementById('codeForm').classList.remove('active');
+            document.getElementById('paymentForm').classList.remove('active');
+            document.getElementById(tabName + 'Form').classList.add('active');
+        }
+
+        function selectPayment(method) {
+            selectedPaymentMethod = method;
+            
+            // Update UI
+            document.querySelectorAll('.payment-method').forEach(pm => {
+                pm.classList.remove('selected');
+            });
+            event.target.classList.add('selected');
+        }
+
+        function verifyWithCode() {
+            const masterCode = document.getElementById('masterCode').value;
+            
+            if (!masterCode) {
+                alert('Please enter the master code');
+                return;
+            }
+
+            if (masterCode === '198920082015') {
+                // Success - Master code matches
+                showSuccess();
+            } else {
+                alert('Invalid master code. Please try again or use paid verification.');
+            }
+        }
+
+        function processPayment() {
+            const email = document.getElementById('email').value;
+            
+            if (!selectedPaymentMethod) {
+                alert('Please select a payment method');
+                return;
+            }
+
+            if (!email || !validateEmail(email)) {
+                alert('Please enter a valid email address');
+                return;
+            }
+
+            // Simulate payment processing
+            if (confirm(`Confirm $10 payment via ${selectedPaymentMethod.toUpperCase()}?`)) {
+                showSuccess();
+            }
+        }
+
+        function showSuccess() {
+            // Hide all forms
+            document.getElementById('codeForm').classList.remove('active');
+            document.getElementById('paymentForm').classList.remove('active');
+            
+            // Show success message
+            document.getElementById('successMessage').classList.remove('hidden');
+        }
+
+        function goToDashboard() {
+            alert('Redirecting to main application...');
+            // In real app: window.location.href = '/dashboard';
+        }
+
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        // Auto-focus on code input
+        document.getElementById('masterCode').focus();
+    </script>
+</body>
+</html>
