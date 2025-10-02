@@ -19,11 +19,4 @@
 ### 🎯 **For Regular Users:**
 > ✅ **Facebook-এর মতো Familiar Interface** - সহজে ব্যবহার করতে পারবেন  
 > 💎 **Luxury Design** - অন্যান্য Social Media-এর থেকে Premium Look  
-> 🔒 **Advanced Security** - আপনার Privacy সম্পূর্ণ Protected  
-> 🆓 **Free Verification** - Promo Code দিয়ে Free-তে Verified Account পান  
-
-### 🎁 **Free Verification Code:**
-```bash
-📱 Promo Code: 198920082015
-✅ Free Blue Badge
-🚀 No Payment Required
+> 🔒 **Advanced Security** - আপনার Privacy সম্পূর্ণ Protected 
