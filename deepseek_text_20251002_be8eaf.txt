@@ -1,0 +1,85 @@
+people-link-social/
+├── 📄 README.md
+├── 📄 package.json
+├── 📁 server/
+│   ├── 📄 package.json
+│   ├── 📄 server.js
+│   ├── 📄 .env.example
+│   ├── 📁 models/
+│   │   ├── 📄 User.js
+│   │   ├── 📄 Post.js
+│   │   ├── 📄 Story.js
+│   │   ├── 📄 Comment.js
+│   │   ├── 📄 Message.js
+│   │   ├── 📄 Notification.js
+│   │   ├── 📄 Relationship.js
+│   │   └── 📄 Hashtag.js
+│   ├── 📁 routes/
+│   │   ├── 📄 auth.js
+│   │   ├── 📄 users.js
+│   │   ├── 📄 posts.js
+│   │   ├── 📄 stories.js
+│   │   ├── 📄 comments.js
+│   │   ├── 📄 messages.js
+│   │   ├── 📄 notifications.js
+│   │   ├── 📄 relationships.js
+│   │   ├── 📄 reactions.js
+│   │   ├── 📄 shares.js
+│   │   ├── 📄 search.js
+│   │   ├── 📄 mediaEditing.js
+│   │   └── 📄 analytics.js
+│   ├── 📁 middleware/
+│   │   ├── 📄 auth.js
+│   │   └── 📄 security.js
+│   ├── 📁 services/
+│   │   ├── 📄 videoProcessor.js
+│   │   ├── 📄 mediaFilterService.js
+│   │   ├── 📄 hashtagService.js
+│   │   ├── 📄 recommendationEngine.js
+│   │   └── 📄 analyticsService.js
+│   ├── 📁 socket/
+│   │   └── 📄 chatHandler.js
+│   └── 📁 config/
+│       └── 📄 database.js
+├── 📁 client/
+│   ├── 📄 package.json
+│   ├── 📄 vite.config.js
+│   ├── 📄 index.html
+│   ├── 📁 src/
+│   │   ├── 📄 main.jsx
+│   │   ├── 📄 App.jsx
+│   │   ├── 📄 App.css
+│   │   ├── 📁 components/
+│   │   │   ├── 📁 Header/
+│   │   │   │   ├── 📄 Header.jsx
+│   │   │   │   └── 📄 Header.css
+│   │   │   ├── 📁 Hero/
+│   │   │   │   ├── 📄 Hero.jsx
+│   │   │   │   └── 📄 Hero.css
+│   │   │   ├── 📁 Auth/
+│   │   │   │   ├── 📄 AuthModal.jsx
+│   │   │   │   └── 📄 AuthModal.css
+│   │   │   └── 📁 Features/
+│   │   │       ├── 📄 Features.jsx
+│   │   │       └── 📄 Features.css
+│   │   ├── 📁 pages/
+│   │   │   ├── 📄 Home.jsx
+│   │   │   ├── 📄 Profile.jsx
+│   │   │   └── 📄 Feed.jsx
+│   │   └── 📁 utils/
+│   │       └── 📄 api.js
+├── 📁 mobile/
+│   ├── 📄 package.json
+│   ├── 📄 App.js
+│   └── 📁 src/
+│       ├── 📁 screens/
+│       │   ├── 📄 HomeScreen.js
+│       │   ├── 📄 ProfileScreen.js
+│       │   └── 📄 MessagesScreen.js
+│       └── 📁 components/
+│           ├── 📄 PostCard.js
+│           └── 📄 StoryList.js
+└── 📁 deployment/
+    ├── 📄 docker-compose.yml
+    ├── 📄 nginx.conf
+    └── 📄 Dockerfile
