@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>People Link</title>
+<style>
+  /* ----------------- Gray Luxury Theme + Glass Effect ----------------- */
+  body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(145deg, #3a3a3a, #1f1f1f);
+    color: #f0f0f0;
+    overflow-x: hidden;
+  }
+
+  h1,h2,h3,h4,h5,h6 {margin:0;}
+  a {text-decoration:none;color:inherit;}
+  button {cursor:pointer;}
+
+  /* Glass Cards */
+  .card {
+    backdrop-filter: blur(10px);
+    background: rgba(255,255,255,0.05);
+    border-radius: 15px;
+    padding: 15px;
+    margin: 15px 0;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  }
+
+  /* Header */
+  header {
+    position: sticky;
+    top:0;
+    background: rgba(30,30,30,0.9);
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    padding:10px 20px;
+    z-index:1000;
+    box-shadow:0 2px 8px rgba(0,0,0,0.5);
+  }
+
+  header h1 {
+    font-size:1.8rem;
+    background: linear-gradient(90deg, #ff00ff, #00ffff, #ffff00);
+    -webkit-background-clip: text;
+    color: transparent;
+    animation: rainbow 5s linear infinite;
+  }
+
+  @keyframes rainbow {
+    0%{background-position:0% 50%}
+    50%{background-position:100% 50%}
+    100%{background-position:0% 50%}
+  }
+
+  /* Layout */
+  .container {
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    padding:20px;
+  }
+
+  .sidebar, .main {
+    padding:20px;
+  }
+
+  .sidebar {width:250px;}
+  .main {flex:1; max-width:800px;}
+
+  /* Reels */
+  .reel {
+    width:100%;
+    margin-bottom:20px;
+    border-radius:15px;
+    overflow:hidden;
+  }
+  .reel video, .reel img {
+    width:100%;
+    border-radius:15px;
+    display:block;
+  }
+
+  /* Chat */
+  .chat-box {
+    max-height:300px;
+    overflow-y:auto;
+    border:1px solid #555;
+    border-radius:10px;
+    padding:10px;
+    background: rgba(255,255,255,0.05);
+  }
+  .chat-msg {margin-bottom:10px;}
+  .chat-msg span {font-weight:bold;}
+  input.chat-input {
+    width:calc(100% - 80px);
+    padding:8px;
+    border-radius:8px;
+    border:none;
+    outline:none;
+    margin-right:5px;
+    background:#2a2a2a;
+    color:#f0f0f0;
+  }
+  button.send-btn {padding:8px 15px;border:none;border-radius:8px;background:#00bcd4;color:#fff;}
+
+  /* Form */
+  form {display:flex;flex-direction:column;margin-bottom:20px;}
+  input, textarea {margin-bottom:10px;padding:8px;border-radius:8px;border:none;background:#2a2a2a;color:#f0f0f0;}
+  input[type="file"] {padding:3px;}
+
+  /* Buttons hover */
+  button:hover {opacity:0.85;transition:0.3s;}
+
+</style>
+</head>
+<body>
+<header>
+  <h1>People Link</h1>
+  <nav>
+    <button onclick="showSection('reels')">Reels</button>
+    <button onclick="showSection('chat')">Chat</button>
+    <button onclick="showSection('settings')">Settings</button>
+  </nav>
+</header>
+
+<div class="container">
+  <!-- Sidebar / optional friend list -->
+  <div class="sidebar card">
+    <h3>Friends</h3>
+    <ul id="friendList"></ul>
+    <input type="text" id="friendSearch" placeholder="Search friends" oninput="searchFriend()">
+    <button onclick="addFriend()">Add Friend</button>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main">
+    <!-- Reels Section -->
+    <div id="reels" class="section">
+      <h2>Reels</h2>
+      <form id="uploadForm">
+        <input type="file" id="file" accept="video/*,image/*">
+        <input type="text" id="caption" placeholder="Caption">
+        <button type="submit">Upload Reel</button>
+      </form>
+      <div id="reelFeed"></div>
+    </div>
+
+    <!-- Chat Section -->
+    <div id="chat" class="section" style="display:none;">
+      <h2>Chat</h2>
+      <div class="chat-box" id="chatBox"></div>
+      <div style="display:flex; margin-top:10px;">
+        <input class="chat-input" id="chatInput" placeholder="Type a message">
+        <button class="send-btn" onclick="sendMessage()">Send</button>
+      </div>
+    </div>
+
+    <!-- Settings Section -->
+    <div id="settings" class="section" style="display:none;">
+      <h2>Settings</h2>
+      <label>Username:</label>
+      <input type="text" id="username" placeholder="Your Name">
+      <label>Avatar URL:</label>
+      <input type="text" id="avatarUrl" placeholder="Image URL">
+      <button onclick="saveSettings()">Save Settings</button>
+      <hr>
+      <button onclick="exportData()">Export Data</button>
+      <button onclick="importData()">Import Data</button>
+      <input type="file" id="importFile" style="display:none;" onchange="loadImportedFile(event)">
+    </div>
+  </div>
+</div>
+
+<script>
+/* ------------------- IndexedDB Setup ------------------- */
+let db;
+let request = indexedDB.open("PeopleLinkDB",1);
+request.onupgradeneeded = function(e){
+  db = e.target.result;
+  db.createObjectStore("reels",{keyPath:"id",autoIncrement:true});
+  db.createObjectStore("chats",{keyPath:"id",autoIncrement:true});
+  db.createObjectStore("settings",{keyPath:"key"});
+};
+request.onsuccess = function(e){ db=e.target.result; loadReels(); loadSettings(); loadFriends(); };
+
+/* ------------------- Sections ------------------- */
+function showSection(name){
+  document.querySelectorAll('.section').forEach(s=>s.style.display='none');
+  document.getElementById(name).style.display='block';
+}
+
+/* ------------------- Settings ------------------- */
+function saveSettings(){
+  const name=document.getElementById('username').value;
+  const avatar=document.getElementById('avatarUrl').value;
+  const tx=db.transaction("settings","readwrite");
+  const store=tx.objectStore("settings");
+  store.put({key:"username",value:name});
+  store.put({key:"avatar",value:avatar});
+  alert("Settings saved!");
+}
+function loadSettings(){
+  const tx=db.transaction("settings","readonly");
+  const store=tx.objectStore("settings");
+  store.get("username").onsuccess=function(e){ if(e.target.result) document.getElementById('username').value=e.target.result.value; };
+  store.get("avatar").onsuccess=function(e){ if(e.target.result) document.getElementById('avatarUrl').value=e.target.result.value; };
+}
+
+/* ------------------- Friends ------------------- */
+let friends=[];
+function addFriend(){
+  const name=prompt("Friend Name?");
+  if(name){ friends.push({name}); renderFriends(); }
+}
+function renderFriends(){
+  const list=document.getElementById('friendList');
+  list.innerHTML='';
+  friends.forEach(f=>{ const li=document.createElement('li'); li.textContent=f.name; list.appendChild(li); });
+}
+function loadFriends(){ renderFriends(); }
+function searchFriend(){
+  const val=document.getElementById('friendSearch').value.toLowerCase();
+  const filtered=friends.filter(f=>f.name.toLowerCase().includes(val));
+  const list=document.getElementById('friendList');
+  list.innerHTML='';
+  filtered.forEach(f=>{ const li=document.createElement('li'); li.textContent=f.name; list.appendChild(li); });
+}
+
+/* ------------------- Reels ------------------- */
+document.getElementById('uploadForm').addEventListener('submit',function(e){
+  e.preventDefault();
+  const file=document.getElementById('file').files[0];
+  if(!file) return alert('Select a file');
+  const caption=document.getElementById('caption').value;
+  const reader=new FileReader();
+  reader.onload=function(ev){
+    const tx=db.transaction("reels","readwrite");
+    const store=tx.objectStore("reels");
+    store.add({type:file.type.startsWith('video')?'video':'image',src:ev.target.result,caption:caption});
+    tx.oncomplete=loadReels;
+  }
+  reader.readAsDataURL(file);
+});
+
+function loadReels(){
+  const feed=document.getElementById('reelFeed');
+  feed.innerHTML='';
+  const tx=db.transaction("reels","readonly");
+  const store=tx.objectStore("reels");
+  store.openCursor().onsuccess=function(e){
+    const cursor=e.target.result;
+    if(cursor){
+      const r=cursor.value;
+      const div=document.createElement('div');
+      div.className='reel card';
+      if(r.type==='video'){
+        const v=document.createElement('video'); v.src=r.src; v.controls=true; div.appendChild(v);
+      }else{
+        const img=document.createElement('img'); img.src=r.src; div.appendChild(img);
+      }
+      const cap=document.createElement('p'); cap.textContent=r.caption; div.appendChild(cap);
+      feed.appendChild(div);
+      cursor.continue();
+    }
+  }
+}
+
+/* ------------------- Chat ------------------- */
+let chats=[];
+function sendMessage(){
+  const msg=document.getElementById('chatInput').value;
+  if(!msg) return;
+  const tx=db.transaction("chats","readwrite");
+  const store=tx.objectStore("chats");
+  store.add({from:"Me",text:msg,ts:Date.now()});
+  tx.oncomplete=loadChats;
+  document.getElementById('chatInput').value='';
+}
+function loadChats(){
+  const chatBox=document.getElementById('chatBox');
+  chatBox.innerHTML='';
+  const tx=db.transaction("chats","readonly");
+  const store=tx.objectStore("chats");
+  store.openCursor().onsuccess=function(e){
+    const cursor=e.target.result;
+    if(cursor){
+      const c=cursor.value;
+      const div=document.createElement('div'); div.className='chat-msg';
+      div.innerHTML=`<span>${c.from}:</span> ${c.text}`;
+      chatBox.appendChild(div);
+      cursor.continue();
+    }
+  }
+}
+
+/* ------------------- Export/Import ------------------- */
+function exportData(){
+  const dbExport={reels:[],chats:[],settings:[]};
+  const tx=db.transaction("reels","readonly"); const store=tx.objectStore("reels"); store.getAll().onsuccess=function(e){ dbExport.reels=e.target.result; 
+    const tx2=db.transaction("chats","readonly"); const store2=tx2.objectStore("chats"); store2.getAll().onsuccess=function(e2){ dbExport.chats=e2.target.result;
+      const tx3=db.transaction("settings","readonly"); const store3=tx3.objectStore("settings"); store3.getAll().onsuccess=function(e3){
+        dbExport.settings=e3.target.result;
+        const blob=new Blob([JSON.stringify(dbExport)],{type:'application/json'});
+        const url=URL.createObjectURL(blob);
+        const a=document.createElement('a'); a.href=url; a.download='peoplelink_backup.json'; a.click();
+      }
+    }
+  }
+}
+function importData(){ document.getElementById('importFile').click(); }
+function loadImportedFile(e){
+  const file=e.target.files[0]; const reader=new FileReader();
+  reader.onload=function(ev){
+    const data=JSON.parse(ev.target.result);
+    const tx=db.transaction("reels","readwrite"); data.reels.forEach(r=>tx.objectStore("reels").put(r));
+    const tx2=db.transaction("chats","readwrite"); data.chats.forEach(c=>tx2.objectStore("chats").put(c));
+    const tx3=db.transaction("settings","readwrite"); data.settings.forEach(s=>tx3.objectStore("settings").put(s));
+    alert("Data imported!");
+    loadReels(); loadChats(); loadSettings();
+  }
+  reader.readAsText(file);
+}
+</script>
+</body>
+</html>
